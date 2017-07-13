@@ -33,8 +33,15 @@ Task 1 - Prepare the F5-Super-Netops container and create you AWS lab account
 
    docker run -p 8080:80 -p 2222:22 -it f5devcentral/f5-super-netops-container:base
 
-2. Wait until the f5-super-netops continer has finished launching. From inside the container, clone the git repository for this lab, change to the working directory, and run the f5-super-netops-install.sh script.
+2. Wait until the f5-super-netops continer has finished launching. From inside the container:
 
+- Change to your home directory. 
+- Clone the git repository for this lab.
+- Change to the working directory.
+- Run the f5-super-netops-install.sh script.
+
+Cut and paste the commands below to accomplish the steps above.
+   
 .. code-block:: bash
 
    cd ~
@@ -47,7 +54,17 @@ Task 1 - Prepare the F5-Super-Netops container and create you AWS lab account
 .. code-block:: bash
    
    pwd
-   /root/marfil-f5-terraform
+
+...output should read "/root/marfil-f5-terraform"
+
+
+.. attention:: You can run the entire lab successfully from your terminal without having to ssh into the container. However, if you decide to run this lab via an ssh session to a docker container, the super-netops-container created here or one provided for you, then immediately after you ssh into the super-netops-container make sure to run bash as super user / root by invoking the command:
+
+.. code-block:: bash
+   
+   su -
+
+...to invoke commands as root.
 
 3. When prompted, enter the decryption password, email address, and aws console password. The email address is used to create an aws console login and to tag all of your lab components.
 
@@ -291,6 +308,7 @@ Stop the active BigIP instance in AZ1 via the AWS console and the elastic IP wil
 
 Task 7 - Application Services iApp, Service Discovery iApp, and Ansible! Deploy http virtual server with iRule for 0-day attack.
 --------------------------------------------------------------------------------------------------------------------------------
+
 - Under development
 - Deploy the Service Discovery iApp and use tags to automatically create and populate F5 BigIP pools.
 - Deploy the previous task's iApp programmatically via Ansible.
