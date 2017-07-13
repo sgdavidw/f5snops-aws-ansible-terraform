@@ -24,7 +24,7 @@ https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-conso
    - http://www.iplocation.net
    - http://www.whatismyip.com
 
-Task 1 - Prepare the F5-Super-Netops container and create you AWS lab account
+Task 1 - Prepare the F5-Super-Netops container and create your AWS lab account
 -----------------------------------------------------------------------------
 
 1. From a Linux terminal, MacOS terminal, or Windows PowerShell, launch super-netops docker container.
@@ -33,7 +33,7 @@ Task 1 - Prepare the F5-Super-Netops container and create you AWS lab account
 
    docker run -p 8080:80 -p 2222:22 -it f5devcentral/f5-super-netops-container:base
 
-2. Wait until the f5-super-netops continer has finished launching. From inside the container:
+2. Wait until the f5-super-netops container has finished launching. From inside the container:
 
 - Change to your home directory. 
 - Clone the git repository for this lab.
