@@ -128,7 +128,8 @@ resource "aws_launch_configuration" "example" {
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Hello, World" > index.html
+              az = `curl 169.254.169.254/latest/meta-data/placement/availability-zone`
+              echo "Hello, World from $az" > index.html
               nohup busybox httpd -f -p "${var.server_port}" &
               EOF
 
