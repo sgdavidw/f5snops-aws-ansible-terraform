@@ -136,7 +136,8 @@ ssh -i ./MyKeyPair-t.marfil@f5.io.pem admin@`terraform output aws_instance.bigiq
 
 .. code-block:: bash
 
-   modify auth user admin password mylabpass
+   modify /auth password admin
+   # enter [mylabpass] when prompted
    save sys config
    bash
    /usr/local/bin/SOAPLicenseClient --verbose --basekey XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
@@ -217,7 +218,8 @@ Task 5 - Verify a healthy F5 environment
 
 .. code-block:: bash
 
-   modify auth user admin password [mylabpass]
+   modify /auth password admin
+   # enter [mylabpass] when prompted
    save sys config
    show ltm virtual-address
 
