@@ -37,8 +37,9 @@ Task 1 - Prepare the F5-Super-Netops container and create you AWS lab account
 
 .. code-block:: bash
 
+   cd ~
    git clone https://github.com/TonyMarfil/marfil-f5-terraform
-   cd ./marfil-f5-terraform/
+   cd ~/marfil-f5-terraform/
    source ./scripts/f5-super-netops-install.sh
 
 .. attention:: For a smooth ride, always invoke commands as root, from inside the cloned git repository. To check you're in the right place:
