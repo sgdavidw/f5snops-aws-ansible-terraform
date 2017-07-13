@@ -274,6 +274,8 @@ Task 6 - Deploy a virtual server on a BigIP Cluster across two Availability Zone
 
 12. Configure iApp:
 
+    Select "Advanced" from "Template Selection"
+
     Traffic Group: UNCHECK "Inherit traffic group from current partition / path"
 
     Name: **vs1**
