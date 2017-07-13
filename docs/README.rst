@@ -64,8 +64,6 @@ Cut and paste the commands below to accomplish the steps above.
    
    su -
 
-...to invoke commands as root.
-
 3. When prompted, enter the decryption password, email address, and aws console password. The email address is used to create an aws console login and to tag all of your lab components.
 
 4. Invoke terraform.
@@ -172,10 +170,13 @@ We are going to launch two cloud formation templates simultaneously.
 
  https://github.com/F5Networks/f5-aws-cloudformation/tree/master/supported/solutions/autoscale/waf/
 
+.. image:: ./images/config-diagram-autoscale-waf.png
+
 - ...and the experimental version of "Deploying the BIG-IP in AWS - Clustered 2-NIC across Availability Zones" which supports automatic Big-IQ Licensing:
 
  https://github.com/F5Networks/f5-aws-cloudformation/tree/master/supported/cluster/2nic/across-az-ha
 
+.. image:: ./images/aws-2nic-cluster-across-azs.png
 
 1. Let's wake-up the F5 cloud formation templates that have been laying dormant! From the f5-super-netops container shell:
 
@@ -254,7 +255,7 @@ Task 6 - Deploy a virtual server on a BigIP Cluster across two Availability Zone
 
 .. code-block:: bash
 
-   modify auth user admin shell bash
+   modify auth user admin password mylabpass
    save sys config
 
 6. Login to the active BigIP configuration utility (web ui).
