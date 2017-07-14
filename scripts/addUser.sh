@@ -15,7 +15,7 @@ do
   else
     ok=1
     
-exaliasprefix=f5agility2017
+aliasprefix=f5agility2017
 emailidsan=`echo $emailid | sed 's/[\@._-]//g'`
 alias=${aliasprefix}${emailidsan}
 groupName=aws-full-access
