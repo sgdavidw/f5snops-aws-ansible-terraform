@@ -134,7 +134,8 @@ ssh -i ./MyKeyPair-t.marfil@f5.io.pem admin@`terraform output aws_instance.bigiq
 
 .. code-block:: bash
 
-   modify auth user admin password mylabpass
+   modify /auth password admin
+   # enter [mylabpass] when prompted
    save sys config
    bash
    /usr/local/bin/SOAPLicenseClient --verbose --basekey XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
@@ -218,7 +219,8 @@ Task 5 - Verify a healthy F5 environment
 
 .. code-block:: bash
 
-   modify auth user admin password [mylabpass]
+   modify /auth password admin
+   # enter [mylabpass] when prompted
    save sys config
    show ltm virtual-address
 
@@ -271,6 +273,8 @@ Task 6 - Deploy a virtual server on a BigIP Cluster across two Availability Zone
 11. Deploy an iApp using the f5.tcp.v1.0.0rc2.tmpl template.
 
 12. Configure iApp:
+
+    Select "Advanced" from "Template Selection"
 
     Traffic Group: UNCHECK "Inherit traffic group from current partition / path"
 
