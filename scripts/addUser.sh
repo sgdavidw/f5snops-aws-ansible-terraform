@@ -4,10 +4,6 @@ ok=0
 
 while [ $ok = 0 ]
 do
-  echo "Enter an email address - 25 characters max:
-"
-  read emailid
-
   if [ -f "./aws_accesskeys_${emailid}.json" ]; then 
     echo "Account exists. Exporting shell variables.
   "
@@ -19,11 +15,7 @@ do
   else
     ok=1
     
-echo "Enter an aws console password:
-"
-read awsConsolePass
-
-aliasprefix=f5agility2017
+exaliasprefix=f5agility2017
 emailidsan=`echo $emailid | sed 's/[\@._-]//g'`
 alias=${aliasprefix}${emailidsan}
 groupName=aws-full-access
