@@ -1,44 +1,86 @@
 Task 0 - Prerequisites
 ----------------------
 
-.. important:: Decryption password and IP address of the BigIQ License Server will be announced at the start of the lab.
+.. important:: Your student account, decryption password and IP address of the BigIQ License Server will be announced at the start of the lab.
 
-For this lab you will only need a laptop or workstation with: a working installation of docker on any operating system, an Internet connection and a web browser compatible with the aws web console. Any of the aws supported browsers will do:
+Though the environment runs on a shared AWS account, every student wil build and work in a dedicated AWS VPC.
 
-https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/
+For this lab, a Ravello Windows 10 remote desktop jump host and Linux web based shell will be provided as a consistent starting point. [access instructions here].
+
+Alternatively, you can run the lab from any laptop or workstation with:
+
+- a working installation of docker on any operating system
+- an Internet connection
+- a web browser compatible with the aws web console. Any of the aws supported browsers will do:
+  https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/
 
 1. Install Docker:
 
    - Mac:
      https://docs.docker.com/docker-for-mac/
 
+   - Linux:
+     https://docs.docker.com/engine/installation/
+
    - Windows:
      https://docs.docker.com/docker-for-windows/install/
 
-   - Linux
-     https://docs.docker.com/engine/installation/
+.. warning:: Docker for Windows is based on Microsoft Hyper-V and will disable VMWware Workstation if running on the same machine. If you have VMWare Workstation, do not install Docker for Windows. Stick to the webshell.
 
-2. Confirm your source IP address:
+2. Access to the lab is restriced by source IP address. Confirm your source IP address:
 
    - http://www.ipchicken.com
    - http://www.iplocation.net
    - http://www.whatismyip.com
 
-Task 1 - Prepare the F5-Super-Netops container and create your AWS lab account
------------------------------------------------------------------------------
+Task 1 - Prepare the F5-Super-Netops container, create your AWS lab account, and build the AWS lab environment
+--------------------------------------------------------------------------------------------------------------
 
-1. From a Linux terminal, MacOS terminal, or Windows PowerShell, launch super-netops docker container.
+Let's asssume:
+
+- Student account name = "user01@f5.io"
+- Decryption password = "green-eggs-and-ham"
+- Big-IQ License Manager = "null" because it's not used.
+
+1. From the lab web shell, pull down the f5-super-netops container image, launch the super-netops docker container in interactive mode, map port 22 on the container with 2222 on the host, and port 80 on the container with 8080 on the host, then name the container with your username.
+
+Cut and past the command below to accomplish the steps above. Replace "user01" with the userXX assigned to you.
 
 .. code-block:: bash
 
-   docker run -p 8080:80 -p 2222:22 -it f5devcentral/f5-super-netops-container:base
+   docker run -p 8080:80 -p 2222:22 -it --name user01 f5devcentral/f5-super-netops-container:base
 
-2. Wait until the f5-super-netops container has finished launching. From inside the container:
+2. Once the build scripts complete and you're at the root bash prompt [root@f5-super-netops] [/] #, dettach from the running container by pressing <CTRL> + P + Q. This will drop you back down to the Bash shell. From here, check that your container is running, and ssh to the running container.
+
+.. code-block:: bash
+
+   docker ps
+   ssh -p 2222 snops@localhost
+
+...password is "default".
+
+Switch to root:
+
+su -
+
+...password is "default".
+
+2. Export your student account and decryption password variables. Your student account will be used to create an AWS console login as well as to tag all of the objects created in AWS so you can quickly identify them when when working in the AWS web console. The decryption password will be used to grant access to the shared aws account both via the AWS API and as the password for the AWS web console. Replace the emailid and decryptPassword values below with the student account name and decryption password assigned to you at the start of the lab.
+
+.. code-block:: bash
+
+export emailid=user01@f5.io
+export decryptPassword=green-eggs-and-ham
+export
+
+...confirm the exported variables are correct.
+
+3. Create an AWS account and other onboarding steps:
 
 - Change to your home directory. 
 - Clone the git repository for this lab.
 - Change to the working directory.
-- Run the f5-super-netops-install.sh script.
+- Run the start script.
 
 Cut and paste the commands below to accomplish the steps above.
    
@@ -47,7 +89,7 @@ Cut and paste the commands below to accomplish the steps above.
    cd ~
    git clone https://github.com/TonyMarfil/marfil-f5-terraform
    cd ~/marfil-f5-terraform/
-   source ./scripts/f5-super-netops-install.sh
+   source ./start
 
 .. attention:: For a smooth ride, always invoke commands as root, from inside the cloned git repository. To check you're in the right place:
 
@@ -58,23 +100,21 @@ Cut and paste the commands below to accomplish the steps above.
 ...output should read "/root/marfil-f5-terraform"
 
 
-.. attention:: You can run the entire lab successfully from your terminal without having to ssh into the container. However, if you decide to run this lab via an ssh session to a docker container, the super-netops-container created here or one provided for you, then immediately after you ssh into the super-netops-container make sure to run bash as super user / root by invoking the command:
-
-.. code-block:: bash
-   
-   su -
-
-3. When prompted, enter the decryption password, email address, and aws console password. The email address is used to create an aws console login and to tag all of your lab components.
-
-4. Invoke terraform.
-
-.. attention:: If Big-IQ License Manager has been configured previously, use the provided address. Otherwise cut and paste from below.
+4. Invoke terraform. If the IP address of the Big-IQ License Manager has been provided for you at the beginning of the lab, enter it when prompted for "Management IP address of the BigIQ License Manager". Otherwise, we will use utility licenseing and so enter "null".
 
 .. code-block:: bash
 
-   terraform plan -var bigiqLicenseManager="null"
+   terraform plan
 
-   terraform apply -var bigiqLicenseManager="null"
+   terraform apply
+
+5. Once "terraform apply" completes, you can test your web server instances and ELB are up:
+
+.. code-block:: bash
+
+   while :; do curl `terraform output elb_dns_name`; sleep 1; done
+
+You should see a reply 'Hello, World'. Hit <ctrl>+C to stop.
 
 When 'terraform apply' completes, note the \*\*aws_alias\*\* and vpc-id values. Open up your \*\*aws_alias\*\* link in a browser and login to the AWS console with the email address and password you created during the install. You can always get these values by invoking terraform output with the variable name:
 
@@ -83,88 +123,14 @@ When 'terraform apply' completes, note the \*\*aws_alias\*\* and vpc-id values. 
    terraform output **aws_alias**
    terraform output vpc-id
 
+.. warning:: terraform apply will take five minutes to complete, but the environment will not be ready for another 15 minutes as the Big-IP virtual editions and supporting infrastructure wake up. In the meantime, we can begin to explore the AWS lab environment.
 
-.. Note:: "But what if I forgot my password!"
-   
-   cat ./passwd
+=================================
 
-Task 2 - Login to the AWS console
----------------------------------
+Task 2 - Login to the AWS console and explore the F5 / AWS lab environment
+--------------------------------------------------------------------------
 
-1. Use the alias aws console link, email address and password you created earlier to login to the aws console. Navigate to Services => Networking & Content Delivery => VPC. Click on # VPCs. In the search field type your email address or last three digits of your vpc-id. You should see your VPC details.
-
-2. Services => Compute => EC2 => Resources => # Running Instances. In the search field enter your email address. You should see your newly created instance running.
-
-3. While your instances and ELB are waking up, you can test with the command:
-
-.. code-block:: bash
-
-   while :; do curl `terraform output elb_dns_name`; sleep 1; done
-
-...until you see a reply 'Hello, World'. Hit <ctrl>+C to stop.
-
-Task 3 - License Big-IQ License Manager and apply license pools
----------------------------------------------------------------
-
-.. note::  The students will not have to complete this task. The Big-IQ License Manager need only be created once with enough pool licenses to accommodate the class.
-
-.. important:: This version of the lab will only work on the shared Field Sales Engineers account while we test. For authenticating Big-IP virtual instances to Big-IQ License Manager, the CloudFormation templates rely on a passwd file in an S3 bucket. The buckets are not public and not accessible outside of our shared AWS account. If you want to edit this to work on a different AWS account:
-
-   - Create a passwd text file (no extension) and upload to your own S3 bucket.
-   - Edit f5-cloudformation-cross-az-ha-bigiq.tf.dormant. Look for:
-
-.. code-block:: text
-
-   bigiqPasswordS3Arn   =
-
-...and change the arn to reflect the new arn of your passwd file.
-
-
-1. SSH into the Big-IQ License Manager. Be patient, the Big-IQ License Manager instance is the last one to come up. This might take up to 5 minutes.
-
-ssh -i ./MyKeyPair-[email address].pem admin@`terraform output aws_instance.bigiq.public_ip`
-
-...so if you created an account with t.marfil@f5.io:
-
-ssh -i ./MyKeyPair-t.marfil@f5.io.pem admin@`terraform output aws_instance.bigiq.public_ip`
-
-...autocomplete should be even quicker: ssh -i ./M <Tab> will autocomplete with the correct key name.
-
-2. From Big-IQ tmsh, create an admin password so we can later login to the configuration utility and use the SOAP client to license Big-IQ with F5-BIQ-VE-MAX-LIC license.
-
-.. code-block:: bash
-
-   modify auth user admin password mylabpass
-   save sys config
-   bash
-   /usr/local/bin/SOAPLicenseClient --verbose --basekey XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
-   exit
-   quit
-
-3. Note the terraform output value for aws_instance.bigiq.public_ip. HTTPS to this IP address from the browser and apply one or more F5-BIG-VEP3-25M-4V13-LIC pool licenses.
-
-.. code-block:: bash
-
-   terraform output aws_instance.bigiq.public_ip
-
-4. When you login to Big-IQ via the configuration utility (web ui), you will have to rename bigiq1 => bigiq1.local to get past the Management Address screen and make sure to configure ntp with pool.ntp.org. Click next past the password screen without making any changes. Aside from the aforementioned,  click next, next, next... and accept all defaults.
-
-5. Navigate to Big-IQ Device Manager => Operations => License Management => Licenses. Click on New License. Apply the F5-BIG-VEP3-25M-4V13-LIC pool license registration key.
-
-   License Name: bigiqLicPool
-
-   Activation Method: Automatic
-
-6. Click Activate.
-
-7. Accept the EULA.
-
-8. Wait for Status: * Active.
-
-Task 4 - Launch CloudFormation Templates!
------------------------------------------
-
-We are going to launch two cloud formation templates simultaneously.
+CloudFormation templates is the AWS backed decalarative way to deploy full application stacks to AWS. F5 Virtual Edition can be deployed via CloudFormation Templates and are fully supported by the support organization. (You can open a ticket and 
 
 - Auto scaling the BIG-IP VE Web Application Firewall in AWS:
 
@@ -178,34 +144,53 @@ We are going to launch two cloud formation templates simultaneously.
 
 .. image:: ./images/aws-2nic-cluster-across-azs.png
 
-1. Let's wake-up the F5 cloud formation templates that have been laying dormant! From the f5-super-netops container shell:
+2. Track things are going well in the AWS management console: Services => Management Tools => CloudFormation template. When done, both of your deployed CloudFormation templates will be Status: CREATE_COMPLETE.
 
-.. code-block:: bash
+#. Use the alias aws console link, email address and password you created earlier to login to the aws console. Navigate to Services => Networking & Content Delivery => VPC. Click on # VPCs. In the search field type your user account name. You should see your VPC details. VPC stands for virtual private cloud, this is the slice of the amazon cloud that has been dedicated for your lab environment.
 
-   mv f5-cloudformation-autoscale-waf.tf.dormant f5-cloudformation-autoscale-waf.tf
-   mv f5-cloudformation-cross-az-ha-bigiq.tf.dormant f5-cloudformation-cross-az-ha-bigiq.tf
-   terraform plan -var bigiqLicenseManager=`terraform output aws_instance.bigiq.public_ip`
-   terraform apply -var bigiqLicenseManager=`terraform output aws_instance.bigiq.public_ip`
+# In the upper right hand corner, ensure you are in the N. Virginia region (us-east-1).
 
-2. Track things are going well in the AWS management console: Services => Management Tools => CloudFormation template. When done, both of your deployed CloudFormation templates will be Status: CREATE_COMPLETE. We still have to wait ~20 minutes for our environment to be ready.
+#. Services => Compute => EC2 => Resources => # Running Instances. In the search filter enter your username. You should see your newly created EC2 instances running.
 
-3. From the f5-super-netops terminal, When done you should see a message like the one below. 
+#. The web application is hosted on webaz1.0 in one availability zone and webaz2.0 in another availability zone. Highlight web-az1.0, in the "Description" tab below note the availability zone. Highlight web-az2.0 and do the same.
 
-.. code-block:: bash
-   
-   Outputs:
+#. Three Big-IP virtual editions are running:
 
-   bigipExternalSecurityGroup = sg-xxxxxxxx
-   bigipManagementSecurityGroup = sg-xxxxxxxx
-   elb_dns_name = terraform-asg-example-xxxxxxxxx.us-east-1.elb.amazonaws.com
-   ...
-   ...
+  - BIGIP1 and BIGIP2 are in a cross availability zone cluster that was deployed via a CloudFormation template.
+  - BIG-IP Autoscale Instance is the first F5 web application firewall Big-IP Virtual Edition provisioned for Application Security Manager. Depending on configurable traffic thresholds the WAF will scale from 1 to N instances. These threholds are controlled via an auto scale group policy...
 
-Terraform has successfully done its job, but we still must wait for instances to spin up. Log back in to the AWS console to track status of the new instances. This can take up to 20 minutes.
+5. Cloud-init. Version 13 of Big-IP supports cloud-init. Right click on BIGIP1 => Instance Settings => View/Change User Data. Cloud-init is the industry standard way to inject commands into an F5 cloud image to automate all aspects of the on-boarding process: https://cloud-init.io/.
 
-20 minutes later...
+#. Services => Compute => EC2 => AUTO SCALING => Auto Scaling Groups.
+   - In the search filter enter your username. Highlight the waf... auto scaling group.
+   - Under the "Scaling Policies" tab below review the policy for scaling up and scaling down.
 
-Task 5 - Verify a healthy F5 environment
+#. Services => Compute => EC2 => LOAD BALANCING => Load Balancers. In the search filter enter your username. You should see your newly created elastic load balancers running.
+  - Choose the tf-elb-userXX load balancer and highlight the "Instances" tab below. This is the load balancer that is in front of your simple web application hosted on web-az1.0 and web-az2.0.
+  - Choose the waf-userXX load balancer and highlight the "Instances" tab below. This is the load balancer that is in front of your F5 web application firewall(s). 
+
+#. GitHub. Fully supported F5 Networks Solutions are hosted in the official F5 Networks GitHub repository:
+   - https://github.com/f5networks
+   - We are running the lab from the f5-super-devops container: https://github.com/f5devcentral/f5-super-netops-container
+   - AWS CloudFormation templates: https://github.com/F5Networks/f5-aws-cloudformation
+
+#. We used terraform to trigger two CloudFormation templates:
+
+  - Auto scaling the BIG-IP VE Web Application Firewall in AWS:
+
+   https://github.com/F5Networks/f5-aws-cloudformation/tree/master/supported/solutions/autoscale/waf/
+
+.. image:: ./images/config-diagram-autoscale-waf.png
+
+  - ...and the experimental version of "Deploying the BIG-IP in AWS - Clustered 2-NIC across Availability Zones" which supports automatic Big-IQ Licensing:
+
+   https://github.com/F5Networks/f5-aws-cloudformation/tree/master/supported/cluster/2nic/across-az-ha
+
+.. image:: ./images/aws-2nic-cluster-across-azs.png
+
+#. From the AWS management console: Services => Management Tools => CloudFormation template. Both of your deployed CloudFormation templates will be Status: CREATE_COMPLETE. Here you can expand and review the steps or troubleshoot if something went wrong.
+
+Task 4 - Verify a healthy F5 environment
 ----------------------------------------
 
 1. Find the public IP management address of the three BigIP instances that we created. Let's confirm they're up.
@@ -218,7 +203,8 @@ Task 5 - Verify a healthy F5 environment
 
 .. code-block:: bash
 
-   modify auth user admin password [mylabpass]
+   modify /auth password admin
+   # enter [mylabpass] when prompted
    save sys config
    show ltm virtual-address
 
@@ -240,7 +226,7 @@ Task 5 - Verify a healthy F5 environment
    modify auth user admin password mylabpass
    save sys config
 
-Task 6 - Deploy a virtual server on a BigIP Cluster across two Availability Zones
+Task 5 - Deploy a virtual server on a BigIP Cluster across two Availability Zones
 ----------------------------------------------------------------------------------
 
 1. Navigate to AWS Console -> Services -> EC2 -> Running Instances. Note the IPv4 Public IP addresses for the two instances named: "Big-IP: f5-cluster"
@@ -271,6 +257,8 @@ Task 6 - Deploy a virtual server on a BigIP Cluster across two Availability Zone
 11. Deploy an iApp using the f5.tcp.v1.0.0rc2.tmpl template.
 
 12. Configure iApp:
+
+    Select "Advanced" from "Template Selection"
 
     Traffic Group: UNCHECK "Inherit traffic group from current partition / path"
 
