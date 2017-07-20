@@ -31,20 +31,23 @@ pip install --upgrade --user awscli
 mkdir ~/.aws/
 export PATH=~/.local/bin:$PATH
 export AWS_CONFIG_FILE=~/.aws/config
+
+# download aws keys from shortUrl
+cd ~/.aws/ && { wget -O config https://goo.gl/${shortUrl} ; cd -; }
+
 echo "aws --version"
 echo `aws --version`
 
 #mark lab-info python script executable
 chmod +x ./scripts/lab-info
 
-if [ -z "$decryptPassword" ]; then
-   echo "Enter decryption password:
-   "
-   read decryptPassword
-fi
+# if [ -z "$decryptPassword" ]; then
+#    echo "Enter decryption password:
+#    "
+#    read decryptPassword
+# fi
 
-cd ~/.aws/ && { curl -O https://s3.amazonaws.com/marfil-f5-terraform/config.enc ; cd -; }
-openssl aes-256-cbc -d -a -in ~/.aws/config.enc -out ~/.aws/config -pass pass:$decryptPassword
+# openssl aes-256-cbc -d -a -in ~/.aws/config.enc -out ~/.aws/config -pass pass:$decryptPassword
 
 cp ./scripts/.profile ~/.profile
 

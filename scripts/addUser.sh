@@ -42,7 +42,7 @@ aws iam create-access-key --user-name "$emailid" | tee aws_accesskeys_$emailid.j
 
 aws iam create-login-profile \
 --user-name "$emailid" \
-  --password $decryptPassword
+  --password $shortUrl
 
 # create account alias
 #
@@ -70,17 +70,17 @@ openssl req -subj '/O=test LTD./CN=f5.io/C=US' -new -newkey rsa:2048 -days 365 -
 
 # replace temporary aws config file with new account aws access key and secret access key; uses envsubst from the gettext package.
 
-envsubst < ./scripts/config.template > ~/.aws/config
-
-#sleep 5s
+# sleep 5s
 sleep 5s
 
-#touch *.emailid file.
+# touch *.emailid file.
 touch $emailid.emailid
 
 # export environment variables for use by terraform
 
 . ./scripts/export.sh
+
+envsubst < ./scripts/config.template > ~/.aws/config
 
 fi
 done
