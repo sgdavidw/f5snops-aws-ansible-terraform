@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = "${aws_region}"
 }
 
 resource "aws_vpc" "terraform-vpc" {
@@ -18,11 +18,11 @@ resource "aws_vpc" "terraform-vpc" {
   }
 }
 
-resource "aws_subnet" "f5-management-d" {
+resource "aws_subnet" "f5-management-a" {
   vpc_id                  = "${aws_vpc.terraform-vpc.id}"
   cidr_block              = "10.0.101.0/24"
   map_public_ip_on_launch = "false"
-  availability_zone       = "us-east-1d"
+  availability_zone       = "${aws_region}a"
 
   tags {
     Name = "management"
@@ -92,7 +92,7 @@ resource "aws_instance" "bigiq" {
   count                       = 1
   ami                         = "${var.bigiq_ami}"
   instance_type               = "m4.xlarge"
-  subnet_id                   = "${aws_subnet.f5-management-d.id}"
+  subnet_id                   = "${aws_subnet.f5-management-a.id}"
   vpc_security_group_ids      = ["${aws_security_group.f5_management.id}"]
   key_name                    = "${var.aws_keypair}"
   associate_public_ip_address = true
