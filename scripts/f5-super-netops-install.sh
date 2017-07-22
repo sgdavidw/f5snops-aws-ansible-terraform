@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#install boto3
+pip install boto3
+
 #install ab
 apk add apache2-utils
 
@@ -29,15 +32,23 @@ pip install boto3
 mkdir ~/.aws/
 export PATH=~/.local/bin:$PATH
 export AWS_CONFIG_FILE=~/.aws/config
+
+# download aws keys from shortUrl
+cd ~/.aws/ && { wget -O config https://goo.gl/${shortUrl} ; cd -; }
+
 echo "aws --version"
 echo `aws --version`
 
-echo "Enter decryption password:
-"
-read decryptPassword
+#mark lab-info python script executable
+chmod +x ./scripts/lab-info
 
-cd ~/.aws/ && { curl -O https://s3.amazonaws.com/f5-marfil/config.enc ; cd -; }
-openssl aes-256-cbc -d -a -in ~/.aws/config.enc -out ~/.aws/config -pass pass:$decryptPassword
+# if [ -z "$decryptPassword" ]; then
+#    echo "Enter decryption password:
+#    "
+#    read decryptPassword
+# fi
+
+# openssl aes-256-cbc -d -a -in ~/.aws/config.enc -out ~/.aws/config -pass pass:$decryptPassword
 
 cp ./scripts/.profile ~/.profile
 

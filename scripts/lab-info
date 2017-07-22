@@ -34,5 +34,5 @@ for instance in instances:
         print "  VIP IP:\t%s" %(vip_addr)
         if 'Association' in eth1.private_ip_addresses[1]:
             print "  Elastic IP:\t%s" %(eth1.private_ip_addresses[1]['Association']['PublicIp'])
-    print "\n"
 
+    print "\n"

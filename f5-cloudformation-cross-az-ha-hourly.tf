@@ -1,4 +1,4 @@
-resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-bigiq" {
+resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-hourly" {
   name         = "ha-${var.emailidsan}-${aws_vpc.terraform-vpc.id}"
   capabilities = ["CAPABILITY_IAM"]
 
@@ -15,7 +15,7 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-bigiq" {
 
     #INSTANCE CONFIGURATION
 
-    imageName            = "Good"
+    imageName            = "Good25Mbps"
     instanceType         = "t2.medium"
     restrictedSrcAddress = "0.0.0.0/0"
     sshKey               = "${var.aws_keypair}"
@@ -24,10 +24,12 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-bigiq" {
 
     #BIG-IQ LICENSING CONFIGURATION
 
-    bigiqAddress         = "${var.bigiqLicenseManager}"
-    bigiqUsername        = "admin"
-    bigiqPasswordS3Arn   = "arn:aws:s3:::f5-public-cloud/passwd"
-    bigiqLicensePoolName = "${var.bigiqLicensePoolName}"
+
+    # bigiqAddress         = "${var.bigiqLicenseManager}"
+    # bigiqUsername        = "admin"
+    # bigiqPasswordS3Arn   = "arn:aws:s3:::f5-public-cloud/passwd"
+    # bigiqLicensePoolName = "${var.bigiqLicensePoolName}"
+
 
     #TAGS
 
@@ -39,5 +41,5 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-bigiq" {
   }
 
   #CloudFormation templates triggered from Terraform must be hosted on AWS S3. Experimental hosted in non-canonical S3 bucket.
-  template_url = "https://s3.amazonaws.com/f5-marfil/f5-existing-stack-across-az-cluster-bigiq-2nic-bigip.template"
+  template_url = "https://s3.amazonaws.com/f5-cft/f5-existing-stack-across-az-cluster-hourly-2nic-bigip.template"
 }

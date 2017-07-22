@@ -1,5 +1,22 @@
-variable "bigiq_ami" {
-  description = "BigIQ ami to launch"
+/*
+variable "web_server_ami" {
+  description = "web server ami is region specific, defaults to us-east-1"
+  default     = "ami-40d28157"
+  }
+*/
+
+variable "web_server_ami" {
+  type = "map"
+
+  default = {
+    "us-east-1"      = "ami-40d28157"
+    "ap-southeast-1" = "ami-2378f540"
+  }
+}
+
+variable "aws_region" {
+  description = "aws region (default is us-east-1)"
+  default     = "us-east-1"
 }
 
 variable "bigiqLicenseManager" {
@@ -18,19 +35,6 @@ variable "aws_keypair" {
   description = "The name of an existing key pair. In AWS Console: NETWORK & SECURITY -> Key Pairs"
 }
 
-/*
-variable "licenseKey1" {
-  description = "license key 1"
-}
-
-variable "licenseKey2" {
-  description = "license key 2"
-}
-
-variable "bigiqLicense" {
-  description = "BigIQ base license key"
-}
-*/
 variable "emailid" {
   description = "emailid"
 }

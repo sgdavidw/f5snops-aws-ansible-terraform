@@ -3,7 +3,7 @@ resource "aws_elb" "f5-autoscale-waf-elb" {
 
   cross_zone_load_balancing = true
   security_groups           = ["${aws_security_group.elb.id}"]
-  subnets                   = ["${aws_subnet.public-d.id}", "${aws_subnet.public-e.id}"]
+  subnets                   = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
 
   listener {
     lb_port            = 443
@@ -14,7 +14,7 @@ resource "aws_elb" "f5-autoscale-waf-elb" {
   }
 }
 
-resource "aws_cloudformation_stack" "f5-autoscaleWAF" {
+resource "aws_cloudformation_stack" "f5-autoscale-waf" {
   name         = "waf-${var.emailidsan}-${aws_vpc.terraform-vpc.id}"
   capabilities = ["CAPABILITY_IAM"]
 
@@ -22,8 +22,8 @@ resource "aws_cloudformation_stack" "f5-autoscaleWAF" {
     #DEPLOYMENT
     deploymentName           = "waf-${var.emailidsan}"
     vpc                      = "${aws_vpc.terraform-vpc.id}"
-    availabilityZones        = "us-east-1d, us-east-1e"
-    subnets                  = "${aws_subnet.public-d.id},${aws_subnet.public-e.id}"
+    availabilityZones        = "${var.aws_region}a, ${var.aws_region}b"
+    subnets                  = "${aws_subnet.public-a.id},${aws_subnet.public-b.id}"
     restrictedSrcAddress     = "0.0.0.0/0"
     bigipElasticLoadBalancer = "${aws_elb.f5-autoscale-waf-elb.name}"
 

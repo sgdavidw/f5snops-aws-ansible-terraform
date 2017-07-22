@@ -4,29 +4,25 @@ ok=0
 
 while [ $ok = 0 ]
 do
-  echo "Enter an email address - 25 characters max:
-"
-  read emailid
+  if [ -z "$emailid" ]; then
+    echo "Enter an email address - 25 characters max:
+    "
+    read emailid
+  fi
 
   if [ -f "./aws_accesskeys_${emailid}.json" ]; then 
     echo "Account exists. Exporting shell variables.
-  "
+    "
     . ./scripts/export.sh
     ok=1
-  elif [ ${#emailid} -gt 25 ]
-  then
+  elif [ ${#emailid} -gt 25 ]; then
     echo Too long - 25 characters max
   else
     ok=1
-    
-echo "Enter an aws console password:
-"
-read awsConsolePass
 
-aliasprefix=f5agility2017
+alias=f5agility2017
 emailidsan=`echo $emailid | sed 's/[\@._-]//g'`
-alias=${aliasprefix}${emailidsan}
-groupName=aws-full-access
+groupName=terraform-admin
 
 # create user
 
@@ -46,12 +42,12 @@ aws iam create-access-key --user-name "$emailid" | tee aws_accesskeys_$emailid.j
 
 aws iam create-login-profile \
 --user-name "$emailid" \
---password "$awsConsolePass"
+  --password $shortUrl
 
 # create account alias
-
-aws iam create-account-alias \
---account-alias "$alias"
+#
+# aws iam create-account-alias \
+# --account-alias "$alias"
 
 # get user info
 
@@ -74,18 +70,17 @@ openssl req -subj '/O=test LTD./CN=f5.io/C=US' -new -newkey rsa:2048 -days 365 -
 
 # replace temporary aws config file with new account aws access key and secret access key; uses envsubst from the gettext package.
 
-envsubst < ./scripts/config.template > ~/.aws/config
-
-#sleep 5s
+# sleep 5s
 sleep 5s
 
-#touch *.emailid file and echo awsConsolePass.
-echo $awsConsolePass > ./passwd
+# touch *.emailid file.
 touch $emailid.emailid
 
 # export environment variables for use by terraform
 
 . ./scripts/export.sh
+
+envsubst < ./scripts/config.template > ~/.aws/config
 
 fi
 done

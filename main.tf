@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = "${var.aws_region}"
 }
 
 resource "aws_vpc" "terraform-vpc" {
@@ -25,66 +25,66 @@ resource "aws_vpc" "terraform-vpc" {
   */
 }
 
-resource "aws_subnet" "f5-management-d" {
+resource "aws_subnet" "f5-management-a" {
   vpc_id                  = "${aws_vpc.terraform-vpc.id}"
   cidr_block              = "10.0.101.0/24"
   map_public_ip_on_launch = "true"
-  availability_zone       = "us-east-1d"
+  availability_zone       = "${var.aws_region}a"
 
   tags {
     Name = "management"
   }
 }
 
-resource "aws_subnet" "f5-management-e" {
+resource "aws_subnet" "f5-management-b" {
   vpc_id                  = "${aws_vpc.terraform-vpc.id}"
   cidr_block              = "10.0.102.0/24"
   map_public_ip_on_launch = "true"
-  availability_zone       = "us-east-1e"
+  availability_zone       = "${var.aws_region}b"
 
   tags {
     Name = "management"
   }
 }
 
-resource "aws_subnet" "public-d" {
+resource "aws_subnet" "public-a" {
   vpc_id                  = "${aws_vpc.terraform-vpc.id}"
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = "false"
-  availability_zone       = "us-east-1d"
+  availability_zone       = "${var.aws_region}a"
 
   tags {
     Name = "public"
   }
 }
 
-resource "aws_subnet" "private-d" {
+resource "aws_subnet" "private-a" {
   vpc_id                  = "${aws_vpc.terraform-vpc.id}"
   cidr_block              = "10.0.100.0/24"
   map_public_ip_on_launch = "false"
-  availability_zone       = "us-east-1d"
+  availability_zone       = "${var.aws_region}a"
 
   tags {
     Name = "private"
   }
 }
 
-resource "aws_subnet" "public-e" {
+resource "aws_subnet" "public-b" {
   vpc_id                  = "${aws_vpc.terraform-vpc.id}"
   cidr_block              = "10.0.2.0/24"
   map_public_ip_on_launch = "false"
-  availability_zone       = "us-east-1e"
+  availability_zone       = "${var.aws_region}b"
 
   tags {
     Name = "public"
   }
 }
 
-resource "aws_subnet" "private-e" {
+resource "aws_subnet" "private-b" {
   vpc_id                  = "${aws_vpc.terraform-vpc.id}"
   cidr_block              = "10.0.200.0/24"
   map_public_ip_on_launch = "false"
-  availability_zone       = "us-east-1e"
+  availability_zone       = "${var.aws_region}b"
 
   tags {
     Name = "private"
@@ -140,7 +140,7 @@ resource "aws_launch_configuration" "example" {
 
 resource "aws_autoscaling_group" "example" {
   launch_configuration = "${aws_launch_configuration.example.id}"
-  vpc_zone_identifier  = ["${aws_subnet.public-d.id}", "${aws_subnet.public-e.id}"]
+  vpc_zone_identifier  = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
 
   load_balancers    = ["${aws_elb.example.name}"]
   health_check_type = "ELB"
@@ -186,11 +186,13 @@ resource "aws_security_group" "instance" {
   }
 }
 
-resource "aws_instance" "example-d" {
-  count                  = 1
-  ami                    = "ami-40d28157"
+resource "aws_instance" "example-a" {
+  count = 1
+
+  #ami                    = "${var.web_server_ami}"
+  ami                    = "${lookup(var.web_server_ami, var.aws_region)}"
   instance_type          = "t2.micro"
-  subnet_id              = "${aws_subnet.public-d.id}"
+  subnet_id              = "${aws_subnet.public-a.id}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
   key_name               = "${var.aws_keypair}"
 
@@ -210,11 +212,13 @@ resource "aws_instance" "example-d" {
   }
 }
 
-resource "aws_instance" "example-e" {
-  count                  = 1
-  ami                    = "ami-40d28157"
+resource "aws_instance" "example-b" {
+  count = 1
+
+  #ami                    = "{var.web_server_ami}"
+  ami                    = "${lookup(var.web_server_ami, var.aws_region)}"
   instance_type          = "t2.micro"
-  subnet_id              = "${aws_subnet.public-e.id}"
+  subnet_id              = "${aws_subnet.public-b.id}"
   vpc_security_group_ids = ["${aws_security_group.instance.id}"]
   key_name               = "${var.aws_keypair}"
 
@@ -247,7 +251,7 @@ resource "aws_elb" "example" {
 
   cross_zone_load_balancing = true
   security_groups           = ["${aws_security_group.elb.id}"]
-  subnets                   = ["${aws_subnet.public-d.id}", "${aws_subnet.public-e.id}"]
+  subnets                   = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
 
   listener {
     lb_port           = 80
@@ -264,7 +268,7 @@ resource "aws_elb" "example" {
     target              = "HTTP:${var.server_port}/"
   }
 
-  instances                   = ["${aws_instance.example-d.id}", "${aws_instance.example-e.id}"]
+  instances                   = ["${aws_instance.example-a.id}", "${aws_instance.example-b.id}"]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true
