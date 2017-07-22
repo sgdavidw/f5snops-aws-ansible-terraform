@@ -5,7 +5,7 @@ Task 0 - Prerequisites
 
 - Though the environment runs on a shared AWS account, every student will build and work in a dedicated AWS VPC.
 
-- For this lab, a Ravello Windows 10 remote desktop jump host and Linux web based shell will be provided as a consistent starting point. [access instructions here].
+- For this lab, a Ravello Windows 10 remote desktop jump host and Linux web based shell will be provided as a consistent starting point.
 
 - Alternatively, you can run the lab from any laptop or workstation with:
 
@@ -30,7 +30,7 @@ Task 0 - Prerequisites
 Task 1 - Prepare the F5-Super-Netops container, create your AWS lab account, and build the AWS lab environment
 --------------------------------------------------------------------------------------------------------------
 
-Let's asssume:
+Let's assume:
 
 - Student account name = "user01@f5.io"
 - Short URL path = "abc123"
@@ -44,12 +44,7 @@ Cut and past the command below to accomplish the steps above.
 
    docker run -p 8080:80 -p 2222:22 -it -e SNOPS_AUTOCLONE=0 f5devcentral/f5-super-netops-container:base
 
-2. Export your student account and short URL path variables. Your student account will be used to create an AWS console login as well as to tag all of the objects created in AWS so you can quickly identify them when when working in the AWS web console. The short URL path will be used to grant access to the shared aws account both via the AWS API and as the password for the AWS web console. Replace the emailid and shortUrl values below with the student account name and decryption password assigned to you at the start of the lab.
-
-- Change to your home directory. 
-- Clone the git repository for this lab.
-- Change to the working directory.
-- Run the f5-super-netops-install.sh script.
+2. Export your student account and short URL path variables. Your student account will be used to create an AWS console login and tag all of the objects created in AWS so you can quickly identify them when working in the AWS web console. The short URL path will be used to grant access to the shared aws account both via the AWS API and as the password for the AWS web console. Replace the emailid and shortUrl values below with the student account name and decryption password assigned to you at the start of the lab.
 
 Cut and paste the commands below to accomplish the steps above.
    
@@ -86,7 +81,7 @@ Cut and paste the commands below to accomplish the steps above.
 ...output should read "/root/marfil-f5-terraform"
 
 
-4. Invoke terraform. Enter "null" when prompted for the IP address of the Big-IQ License Manager. We will use utility licenseing.
+4. Invoke terraform. Enter "null" when prompted for the IP address of the Big-IQ License Manager. We will use utility licensing.
 
 .. code-block:: bash
 
@@ -132,7 +127,7 @@ Task 2 - Login to the AWS console and explore the F5 / AWS lab environment
 
 #. Use the alias aws console link, email address and password you created earlier to login to the aws console. Navigate to Services => Networking & Content Delivery => VPC. Click on # VPCs. In the search field type your user account name. You should see your VPC details. VPC stands for virtual private cloud, this is the slice of the amazon cloud that has been dedicated for your lab environment.
 
-#. In the upper right hand corner, ensure you are in the correct region. For example: N. Virginia region (us-east-1) is the default.
+#. In the upper right-hand corner, ensure you are in the correct region. For example: N. Virginia region (us-east-1) is the default.
 
 #. Track things are going well in the AWS management console: Services => Management Tools => CloudFormation template. When done, both of your deployed CloudFormation templates will be Status: CREATE_COMPLETE. Here you can expand and review the steps or troubleshoot if something went wrong.
 
@@ -140,7 +135,7 @@ Task 2 - Login to the AWS console and explore the F5 / AWS lab environment
 
 #. Three Big-IP virtual editions are running:
 
-  - BIGIP1 and BIGIP2 are in a cross availability zone cluster that was deployed via a CloudFormation template.
+  - BIGIP1 and BIGIP2 are in a cross-availability zone cluster that was deployed via a CloudFormation template.
   - BIG-IP Autoscale Instance is the first F5 web application firewall provisioned for Application Security Manager with a low, medium, or high starter policy enabled. Depending on configurable traffic thresholds the WAF will scale from 1 to N instances. These thresholds are controlled via an auto scale group policy.
 
 6.  Cloud-init. Version 13 of Big-IP supports cloud-init. Right click on BIGIP1 => Instance Settings => View/Change User Data. Cloud-init is the industry standard way to inject commands into an F5 cloud image to automate all aspects of the on-boarding process: https://cloud-init.io/.
@@ -168,7 +163,7 @@ Task 2 - Login to the AWS console and explore the F5 / AWS lab environment
 Task 3 - Verify a healthy F5 environment
 ----------------------------------------
 
-1. Run the handy lab-info command to quickly identify the IP addresses asssigned to your environment.
+1. Run the handy lab-info command to quickly identify the IP addresses assigned to your environment.
 
 .. code-block:: bash
 
@@ -203,7 +198,7 @@ Sample output above. lab-info will quickly orient you around our deployment. All
 
    - The web-az1.0 and webaz2.0 PRIVATE IP addresses will soon be configured as pool members for our Big-IP HA cluster.
 
-   - Big-IP1 and Big-IP2 are configured as a high availablity cluster across two separate availability zones. Only the active Big-IP will have an Elastic IP address assigned. Configuration changes to the active unit will automatically propagate to the standby unit. During an outage, even one affecting an entire availability zone, the Elastic IP will 'float' over to the unit that is not affected.
+   - Big-IP1 and Big-IP2 are configured as a high availability cluster across two separate availability zones. Only the active Big-IP will have an Elastic IP address assigned. Configuration changes to the active unit will automatically propagate to the standby unit. During an outage, even one affecting an entire availability zone, the Elastic IP will 'float' over to the unit that is not affected.
 
 
    - BIG-IP Autoscale Instance is a single NIC deployment WAF with the MGMT IP address identified.
@@ -216,35 +211,35 @@ Sample output above. lab-info will quickly orient you around our deployment. All
 
 Hello, World
 
-...this is a sign things went well and we can start configuring the Big-IPs to responsibly fulfill our part of the shared responsibility security model: https://aws.amazon.com/compliance/shared-responsibility-model/
+...this is a sign that things went well and we can start configuring the Big-IPs to responsibly fulfill our part of the shared responsibility security model: https://aws.amazon.com/compliance/shared-responsibility-model/
 
 .. image:: https://d0.awsstatic.com/security-center/NewSharedResponsibilityModel.png
 
 Task 4 - Configuration Utility (Web UI) access
 ----------------------------------------------
 
-1. Identify the management IP address of each of the three BigIP instances that we created. By deafult, F5 cloud instances are locked down to ssh key acces only. Let's create an admin password so we can login via the configuration utility (web ui). Assumming you are user01 and the management IP address of your F5 instance is 54.165.15.2.
+1. Identify the management IP address of each of the three BigIP instances that we created. By defaultt, F5 cloud instances are locked down to ssh key access only. Let's create an admin password so we can login via the configuration utility (web ui). Assuming you are user01 and the management IP address of your F5 instance is 54.165.15.2.
 
 .. code-block:: bash
 
    ssh -i ./MyKeyPair-user01@f5.io.pem admin@54.165.15.2
 
-#. Create an admin password.
+2. Create an admin password.
 
 .. code-block:: bash
 
    modify auth user admin password mylabpass
 
-#. Complete the step above for *all three* Big-IP instances:
+3. Complete the step above for *all three* Big-IP instances:
 
-- Big-IP2: ha-user01f5io-vpc-74c7a70d
-    MGMT IP:	34.194.27.11
+   - Big-IP2: ha-user01f5io-vpc-74c7a70d
+       MGMT IP:	34.194.27.11
 
-- BIG-IP Autoscale Instance: waf-user01f5io
-    MGMT IP:	54.165.15.2
+   - BIG-IP Autoscale Instance: waf-user01f5io
+       MGMT IP:	54.165.15.2
 
-- Big-IP1: ha-user01f5io-vpc-74c7a70d
-    MGMT IP:	34.230.189.240
+   - Big-IP1: ha-user01f5io-vpc-74c7a70d
+       MGMT IP:	34.230.189.240
 
 
 Task 5 - Deploy the Service Discovery iApp on a BigIP Cluster across two Availability Zones
@@ -256,21 +251,29 @@ Task 5 - Deploy the Service Discovery iApp on a BigIP Cluster across two Availab
 #. The Service Discovery iApp will automatically discover and populate nodes in the cloud based on tags.
 
 #. From the configuration utility (web ui) of Big-IP1. iApps => Application Services => Create... 
-   Name **service_discovery**
-   Template **f5.service_discovery**
 
-   Pool
-   What is the tag key on your cloud provider for the members of this pool? **application**
-   What is the tag value on your cloud provider for the members of this pool? **f5app**
-   Do you want to create a new pool or use an existing one? **Create new pool...**
++----------------------------------------------------------------------------+----------------------------------+
+| Question                                                                   | value                            |
++============================================================================+==================================+
+| Name                                                                       | service_discovery                |
++----------------------------------------------------------------------------+----------------------------------+
+| Template                                                                   | f5.service.discovery             |
++----------------------------------------------------------------------------+----------------------------------+
+| Pool                                                                                                          |
++----------------------------------------------------------------------------+----------------------------------+
+| What is the tag key on your cloud provider for the members of this pool?   | application                      |
++----------------------------------------------------------------------------+----------------------------------+
+| What is the tag value on your cloud provider for the members of this pool? | f5app                            |
++----------------------------------------------------------------------------+----------------------------------+
+| Do you want to create a new pool or use an existing one?                   | Create new pool...               |
++----------------------------------------------------------------------------+----------------------------------+
+| Application Health                                                                                            |
++----------------------------------------------------------------------------+----------------------------------+
+| Create a new health monitor or use an existing one?                        | http                             |
++----------------------------------------------------------------------------+----------------------------------+
 
-   Click "Finished"
 
-   Application Health
-   Create a new health monitor or use an existing one? **http**
-
-
-#. Local Traffic => Pools => track the newly created service_discovery_pool. Within 60 seconds it should light up green. The service_disovery iApp has discovered and auto-popluted the service_discovery_pool with two web servers.
+5. Local Traffic => Pools => track the newly created service_discovery_pool. Within 60 seconds it should light up green. The service_discovery iApp has discovered and auto-populated the service_discovery_pool with two web servers.
 
 
 Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availability Zones
@@ -294,33 +297,34 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
 
 #. Configure iApp:
 
-    Select "Advanced" from "Template Selection"
+    - Select "Advanced" from "Template Selection"
 
-    Select "Advanced" from "Template Selection"
+    - Traffic Group: UNCHECK "Inherit traffic group from current partition / path"
 
-    Traffic Group: UNCHECK "Inherit traffic group from current partition / path"
++--------------------------------------------------------------------------------------------------------------+----------------------------------+
+| Question                                                                                                     | value                            |
++==============================================================================================================+==================================+
+| Name:                                                                                                        | virtual_server_1                 |
++--------------------------------------------------------------------------------------------------------------+----------------------------------+
+| High Availability. What IP address do you want to use for the virtual server?                                | VIP IP IP of Big-IP1             |
++--------------------------------------------------------------------------------------------------------------+----------------------------------+
+| What is the associated service port?                                                                         | HTTP(80)                         |
++--------------------------------------------------------------------------------------------------------------+----------------------------------+
+| What IP address do you wish to use for the TCP virtual server in the other data center or availability zone? | VIP IP of Big-IP2                |
++--------------------------------------------------------------------------------------------------------------+----------------------------------+
+| Which servers are part of this pool?                                                                         | Private IP of web-az1.0 Port: 80 |
++                                                                                                              +----------------------------------+
+|                                                                                                              | Private IP of web-az2.0 Port: 80 |
++--------------------------------------------------------------------------------------------------------------+----------------------------------+
 
-    Name: **virtual_server_1**
+      .. note:: The preconfigured HA_Across_AZs iApp has both IP addresses for the virtual servers prepopulated. The virtual server IP addresses configured here must match the virtual server IP address configured in the HA_Across_AZs iApp.
 
-    High Availability. What IP address do you want to use for the virtual server? **VIP IP of Big-IP1**
-
-      .. note:: The preconfigured HA_Across_AZs iApp has both IP addresses for the virtual servers prepopulated. The virtual server IP address configured here must match the virtual server IP address configured in the HA_Across_AZs iApp.
-
-    What is the associated service port? **HTTP(80)**
-
-    What IP address do you wish to use for the TCP virtual server in the other data center or availability zone? **VIP IP of Big-IP2**
-
-      .. note:: The preconfigured HA_Across_AZs iApp has both IP addresses for the virtual servers prepopulated. The virtual server IP address configured here must match the virtual server IP address configured in the HA_Across_AZs iApp.
-
-    Which servers are part of this pool?
-    **Private IP of web-az1.0 Port: **80**
-    **Private IP of web-az2.0 Port: **80**
 
     **Finished!**
 
-13. Login to the standby BigIP configuration utility (web ui) and confirm the changes are in sync.
+10. Login to the standby BigIP configuration utility (web ui) and confirm the changes are in sync.
 
-14. Confirm the virtual server is up!
+#. Confirm the virtual server is up!
 
 .. code-block:: bash
 
@@ -329,15 +333,19 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
 ...watch for Hello, World response from Big-IP1.
 
    StatusCode        : 200
+
    StatusDescription : OK
+
    Content           : Hello, World
+
    ...
+
 
 .. code-block:: bash
 
    ./scripts/lab-info
 
- AWS Console => Services => Compute => EC2. Right click on the active BigIP1 instance -> Instance State -> Reboot. In a few seconds, the AWS console and the elastic IP will 'float' over to the second BigIP.
+#. AWS Console => Services => Compute => EC2. Right click on the active BigIP1 instance => Instance State => Reboot. In a few seconds, the AWS console and the elastic IP will 'float' over to the second BigIP.
 
 .. code-block:: bash
 
@@ -347,7 +355,7 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
 
    curl http://52.205.85.86
 
-...watch for Hello, World response from Big-IP2. Traditional HA failover relies on Layer 2 connectivity and a heartbeat to trigger a fail-over event and move a 'floating IP' to a new active unit. There is no Layer 2 connectivity in the cloud across availability zones. The Big-IP will detect an availability zone outage or trouble with a Big-IP VE and the elastic IP will 'float' over to the new active device as you just saw.
+#. ...watch for Hello, World response from Big-IP2. Traditional HA failover relies on Layer 2 connectivity and a heartbeat to trigger a fail-over event and move a 'floating IP' to a new active unit. There is no Layer 2 connectivity in the cloud across availability zones. The Big-IP will detect an availability zone outage or trouble with a Big-IP VE and the elastic IP will 'float' over to the new active device as you just saw.
 
 Task 7 - iRules in AWS
 ----------------------
@@ -356,7 +364,7 @@ Task 8 - Autoscale WAF
 ----------------------
 
 1. Navigate to Services => AUTO SCALINE => Auto Scaling Groups. Filter on your username and select your waf-userxx... auto scaling group.
-2. Select the 'Instances' tab below, and select your Instance ID (there should be only one). If your instance is "Protected from... Scale in" then it will always stay up regardless of scale up/down threholds configured.
+2. Select the 'Instances' tab below, and select your Instance ID (there should be only one). If your instance is "Protected from... Scale in" then it will always stay up regardless of scale up/down thresholds configured.
 3. Select the Scaling Polices tab. These policies were deployed via the CloudFormation template and can be changed via the CloudFormation template.
 4. Login to the active BIG-IP Autoscale Instance MGMT IP **on port 8443** configuration utility (web ui). Using the examples in our lab-info output in earlier tasks: https://54.165.15.2:8443.
 
@@ -368,17 +376,15 @@ Task 8 - Autoscale WAF
 
 .. code-block:: bash
 
-   ./scripts/lab-info
-
    ab -t 120 -c 100 https://waf-user01f5io-xxxxxxxxx.us-east-1.elb.amazonaws.com/
 
 6. Navigate to Service => INSTANCES => Instances. Filter on your username and after 60 seconds (the lowest configurable time threshold) hit refresh to see your 2nd autoscale WAF instance starting.
 
 Task 9 - Nuke environment
 -------------------------
-1.  AWS Console -> Services -> Storage -> S3. Use your user acccount to filter for your S3 buckets. For example: 'user01'. Delete your two S3 buckets prefaced with ha- and waf-.
+1.  AWS Console => Services => Storage => S3. Use your user account to filter for your S3 buckets. For example: 'user01'. Delete your two S3 buckets prefaced with ha- and waf-.
 
-2. AWS Console => Services => Compute => EC2. Auto Scaling Groups. Use same filter as agove.
+2. AWS Console => Services => Compute => EC2. Auto Scaling Groups. Use same filter as above.
 
 3. Click on 'Instances' tab below. Select your Instances. Actions => Instance Protection => Remove Scale In Protection from any instances that are protected.
 
