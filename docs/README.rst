@@ -35,7 +35,6 @@ Let's asssume:
 - Student account name = "user01@f5.io"
 - Short URL path = "abc123"
 - Big-IQ License Manager = "null" because it's not used.
->>>>>>> dev
 
 1. From the lab web shell, pull down the f5-super-netops container image, launch the f5-super-netops docker container in interactive mode, map port 22 on the container with 2222 on the host, and port 80 on the container with 8080 on the host.
 
@@ -243,7 +242,6 @@ Task 4 - Configuration Utility (Web UI) access
 
 - BIG-IP Autoscale Instance: waf-user01f5io
     MGMT IP:	54.165.15.2
->>>>>>> dev
 
 - Big-IP1: ha-user01f5io-vpc-74c7a70d
     MGMT IP:	34.230.189.240
@@ -283,7 +281,6 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
 #. Login to the active Big-IP1 configuration utility (web ui). Using the examples in our lab-info output: https://34.230.189.240.
 
 #. The "HA_Across_AZs" iApp will already be deployed in the Common partition.
->>>>>>> dev
 
 #. The "service_discovery" iApp will already be deployed as well.
 
@@ -349,7 +346,6 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
 .. code-block:: bash
 
    curl http://52.205.85.86
->>>>>>> dev
 
 ...watch for Hello, World response from Big-IP2. Traditional HA failover relies on Layer 2 connectivity and a heartbeat to trigger a fail-over event and move a 'floating IP' to a new active unit. There is no Layer 2 connectivity in the cloud across availability zones. The Big-IP will detect an availability zone outage or trouble with a Big-IP VE and the elastic IP will 'float' over to the new active device as you just saw.
 
