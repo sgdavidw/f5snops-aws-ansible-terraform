@@ -59,9 +59,6 @@ aws iam get-user \
 aws iam list-user-policies \
 --user-name "$emailid"
 
-# sleep 10s
-sleep 10s
-
 # create ssh keys and store private key locally
 
 aws ec2 create-key-pair --key-name MyKeyPair-${emailid} --query 'KeyMaterial' --output text > MyKeyPair-${emailid}.pem
@@ -70,6 +67,8 @@ chmod 400 MyKeyPair-${emailid}.pem
 #create a self-signed SSL certificate
 
 openssl req -subj '/O=test LTD./CN=f5.io/C=US' -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout ${emailidsan}.key -out ${emailidsan}.crt -nodes
+
+# replace temporary aws config file with new account aws access key and secret access key; uses envsubst from the gettext package.
 
 # sleep 5s
 sleep 5s
@@ -80,8 +79,6 @@ touch $emailid.emailid
 # export environment variables for use by terraform
 
 . ./scripts/export.sh
-
-# replace temporary aws config file with new account aws access key and secret access key; uses envsubst from the gettext package.
 
 envsubst < ./scripts/config.template > ~/.aws/config
 
