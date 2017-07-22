@@ -38,11 +38,11 @@ Let's asssume:
 
 1. From the lab web shell, pull down the f5-super-netops container image, launch the f5-super-netops docker container in interactive mode, map port 22 on the container with 2222 on the host, and port 80 on the container with 8080 on the host.
 
-Cut and past the command below to accomplish the steps above. Replace "user01" with the userXX assigned to you.
+Cut and past the command below to accomplish the steps above.
 
 .. code-block:: bash
 
-   docker run -p 8080:80 -p 2222:22 -it -e SNOPS_AUTOCLONE=0 --name user01@f5.io f5devcentral/f5-super-netops-container:base
+   docker run -p 8080:80 -p 2222:22 -it -e SNOPS_AUTOCLONE=0 f5devcentral/f5-super-netops-container:base
 
 2. Export your student account and short URL path variables. Your student account will be used to create an AWS console login as well as to tag all of the objects created in AWS so you can quickly identify them when when working in the AWS web console. The short URL path will be used to grant access to the shared aws account both via the AWS API and as the password for the AWS web console. Replace the emailid and shortUrl values below with the student account name and decryption password assigned to you at the start of the lab.
 
