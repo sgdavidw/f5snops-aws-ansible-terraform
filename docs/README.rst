@@ -86,7 +86,7 @@ Cut and paste the commands below to accomplish the steps above.
 ...output should read "/root/marfil-f5-terraform"
 
 
-4. Invoke terraform. Enter "null" when prompted for the IP address of the Big-IQ License Manager has been provided for you at the beginning of the lab. We will use utility licenseing.
+4. Invoke terraform. Enter "null" when prompted for the IP address of the Big-IQ License Manager. We will use utility licenseing.
 
 .. code-block:: bash
 
