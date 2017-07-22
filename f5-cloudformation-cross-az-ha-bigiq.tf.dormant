@@ -6,11 +6,11 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-bigiq" {
     #NETWORKING CONFIGURATION
 
     Vpc                          = "${aws_vpc.terraform-vpc.id}"
-    managementSubnetAz1          = "${aws_subnet.f5-management-d.id}"
-    managementSubnetAz2          = "${aws_subnet.f5-management-e.id}"
+    managementSubnetAz1          = "${aws_subnet.f5-management-a.id}"
+    managementSubnetAz2          = "${aws_subnet.f5-management-b.id}"
     bigipManagementSecurityGroup = "${aws_security_group.f5_management.id}"
-    subnet1Az1                   = "${aws_subnet.public-d.id}"
-    subnet1Az2                   = "${aws_subnet.public-e.id}"
+    subnet1Az1                   = "${aws_subnet.public-a.id}"
+    subnet1Az2                   = "${aws_subnet.public-b.id}"
     bigipExternalSecurityGroup   = "${aws_security_group.f5_data.id}"
 
     #INSTANCE CONFIGURATION

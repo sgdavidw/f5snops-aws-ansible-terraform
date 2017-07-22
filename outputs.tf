@@ -10,36 +10,36 @@ output "vpc-id" {
   value = "${aws_vpc.terraform-vpc.id}"
 }
 
-output "vpc-public-d" {
-  value = "${aws_subnet.public-d.cidr_block}"
+output "vpc-public-a" {
+  value = "${aws_subnet.public-a.cidr_block}"
 }
 
-output "vpc-public-d-id" {
-  value = "${aws_subnet.public-d.id}"
+output "vpc-public-a-id" {
+  value = "${aws_subnet.public-a.id}"
 }
 
-output "vpc-private-d" {
-  value = "${aws_subnet.private-d.cidr_block}"
+output "vpc-private-a" {
+  value = "${aws_subnet.private-a.cidr_block}"
 }
 
-output "vpc-private-d-id" {
-  value = "${aws_subnet.private-d.id}"
+output "vpc-private-a-id" {
+  value = "${aws_subnet.private-a.id}"
 }
 
-output "vpc-public-e" {
-  value = "${aws_subnet.public-d.cidr_block}"
+output "vpc-public-b" {
+  value = "${aws_subnet.public-a.cidr_block}"
 }
 
-output "vpc-public-e-id" {
-  value = "${aws_subnet.public-d.id}"
+output "vpc-public-b-id" {
+  value = "${aws_subnet.public-a.id}"
 }
 
-output "vpc-private-e" {
-  value = "${aws_subnet.private-d.cidr_block}"
+output "vpc-private-b" {
+  value = "${aws_subnet.private-a.cidr_block}"
 }
 
-output "vpc-private-e-id" {
-  value = "${aws_subnet.private-d.id}"
+output "vpc-private-b-id" {
+  value = "${aws_subnet.private-a.id}"
 }
 
 output "sshKey" {
@@ -55,11 +55,11 @@ output "bigipManagementSecurityGroup" {
 }
 
 output "managementSubnetAz1" {
-  value = "${aws_subnet.f5-management-d.id}"
+  value = "${aws_subnet.f5-management-a.id}"
 }
 
 output "managementSubnetAz2" {
-  value = "${aws_subnet.f5-management-e.id}"
+  value = "${aws_subnet.f5-management-b.id}"
 }
 
 output "restrictedSrcAddress" {
