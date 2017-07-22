@@ -125,7 +125,7 @@ Task 2 - Login to the AWS console and explore the F5 / AWS lab environment
 
 .. image:: ./images/aws-2nic-cluster-across-azs.png
 
-#. Use the alias aws console link, email address and password you created earlier to login to the aws console. Navigate to Services => Networking & Content Delivery => VPC. Click on # VPCs. In the search field type your user account name. You should see your VPC details. VPC stands for virtual private cloud, this is the slice of the amazon cloud that has been dedicated for your lab environment.
+2. Use the alias aws console link, email address and password you created earlier to login to the aws console. Navigate to Services => Networking & Content Delivery => VPC. Click on # VPCs. In the search field type your user account name. You should see your VPC details. VPC stands for virtual private cloud, this is the slice of the amazon cloud that has been dedicated for your lab environment.
 
 #. In the upper right-hand corner, ensure you are in the correct region. For example: N. Virginia region (us-east-1) is the default.
 
@@ -203,7 +203,7 @@ Sample output above. lab-info will quickly orient you around our deployment. All
 
    - BIG-IP Autoscale Instance is a single NIC deployment WAF with the MGMT IP address identified.
 
-#. From the f5-super-netops container test out application behind the auto-scale waf is up.
+2. From the f5-super-netops container test out application behind the auto-scale waf is up.
 
 .. code-block:: bash
 
@@ -306,7 +306,7 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
 +==============================================================================================================+==================================+
 | Name:                                                                                                        | virtual_server_1                 |
 +--------------------------------------------------------------------------------------------------------------+----------------------------------+
-| High Availability. What IP address do you want to use for the virtual server?                                | VIP IP IP of Big-IP1             |
+| High Availability. What IP address do you want to use for the virtual server?                                | VIP IP of Big-IP1                |
 +--------------------------------------------------------------------------------------------------------------+----------------------------------+
 | What is the associated service port?                                                                         | HTTP(80)                         |
 +--------------------------------------------------------------------------------------------------------------+----------------------------------+
@@ -320,7 +320,7 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
       .. note:: The preconfigured HA_Across_AZs iApp has both IP addresses for the virtual servers prepopulated. The virtual server IP addresses configured here must match the virtual server IP address configured in the HA_Across_AZs iApp.
 
 
-    **Finished!**
+**Finished!**
 
 10. Login to the standby BigIP configuration utility (web ui) and confirm the changes are in sync.
 
@@ -345,7 +345,7 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
 
    ./scripts/lab-info
 
-#. AWS Console => Services => Compute => EC2. Right click on the active BigIP1 instance => Instance State => Reboot. In a few seconds, the AWS console and the elastic IP will 'float' over to the second BigIP.
+12. AWS Console => Services => Compute => EC2. Right click on the active BigIP1 instance => Instance State => Reboot. In a few seconds, the AWS console and the elastic IP will 'float' over to the second BigIP.
 
 .. code-block:: bash
 
@@ -355,7 +355,7 @@ Task 6 - Deploy an AWS High-Availability-aware virtual server across two Availab
 
    curl http://52.205.85.86
 
-#. ...watch for Hello, World response from Big-IP2. Traditional HA failover relies on Layer 2 connectivity and a heartbeat to trigger a fail-over event and move a 'floating IP' to a new active unit. There is no Layer 2 connectivity in the cloud across availability zones. The Big-IP will detect an availability zone outage or trouble with a Big-IP VE and the elastic IP will 'float' over to the new active device as you just saw.
+...watch for Hello, World response from Big-IP2. Traditional HA failover relies on Layer 2 connectivity and a heartbeat to trigger a fail-over event and move a 'floating IP' to a new active unit. There is no Layer 2 connectivity in the cloud across availability zones. The Big-IP will detect an availability zone outage or trouble with a Big-IP VE and the elastic IP will 'float' over to the new active device as you just saw.
 
 Task 7 - iRules in AWS
 ----------------------
