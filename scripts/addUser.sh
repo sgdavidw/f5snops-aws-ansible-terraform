@@ -22,7 +22,7 @@ do
 
 alias=f5agility2017
 emailidsan=`echo $emailid | sed 's/[\@._-]//g'`
-groupName=terraform-admin
+groupName=terraform-lab-user
 
 # create user
 
