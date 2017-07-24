@@ -14,4 +14,4 @@ export TF_VAR_emailidsan=`echo ${emailid} | sed 's/[\@._-]//g'`
 sleep 5
 export TF_VAR_aws_alias=https://`aws iam list-account-aliases | jq --raw-output .AccountAliases[]`.signin.aws.amazon.com/console
 aws s3 mb s3://${TF_VAR_emailidsan}-terraform-bucket
-terraform init -backend-config bucket=${TF_VAR_emailidsan}-bucket -backend-config region=us-east-1
+terraform init -backend-config bucket=${TF_VAR_emailidsan}-terraform-bucket -backend-config region=us-east-1
