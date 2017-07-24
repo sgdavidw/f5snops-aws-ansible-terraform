@@ -2,6 +2,8 @@
 import boto3
 import sys
 import os
+import subprocess
+import optparse
 student_email = os.getenv('emailid')
 student_id = student_email.replace('@','')
 student_id = student_id.replace('.','')
@@ -26,13 +28,42 @@ for instance in instances:
     print instance_name
     if 'web-az' not in instance_name:
         print "  MGMT IP:\t%s" %(instance.public_ip_address)
+        cmd = "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i MyKeyPair-%s.pem admin@%s" %(student_email,instance.public_ip_address)
+        cmd_array = cmd.split()
+        cmd_array.append("show sys mcp-state field-fmt")
+
+        output = None
+        print "   STATUS:\t",
+        try:
+            output = subprocess.check_output(cmd_array,stderr=subprocess.STDOUT)
+        except Exception,e:
+            pass
+        if "phase running" in output:
+            print "MCPD is up,",
+            cmd_array = cmd.split()
+            cmd_array.append("run /util bash -c \"tail -3 /var/log/cloudlibs-install.log\"")
+            output = subprocess.check_output(cmd_array,stderr=subprocess.STDOUT)
+            if "Custom script finished." in output or "custom-config.sh complete" in output:
+                print "System Ready"
+                if "waf" in instance_name:
+                    print " MGMT URL:\thttps://%s:8443" %(instance.public_ip_address)
+                    print "      SSH:\t%s" %(cmd)
+                else:
+                    print " MGMT URL:\thttps://%s" %(instance.public_ip_address)
+                    print "      SSH:\t%s" %(cmd)
+            else:
+                print "System Not Ready"
+        else:
+            print "MCPD is down, System Not Ready"
+            
+        #print output
     else:
         print "  PRIVATE IP:\t%s" %(instance.private_ip_address)
     if 'ha-%s' %(student_id) in instance_name:
         eth1 = filter(lambda a: a.attachment['DeviceIndex'] == 1, instance.network_interfaces)[0]
         vip_addr =  eth1.private_ip_addresses[1]['PrivateIpAddress']
-        print "  VIP IP:\t%s" %(vip_addr)
+        print "   VIP IP:\t%s" %(vip_addr)
         if 'Association' in eth1.private_ip_addresses[1]:
-            print "  Elastic IP:\t%s" %(eth1.private_ip_addresses[1]['Association']['PublicIp'])
+            print "Elastic IP:\t%s" %(eth1.private_ip_addresses[1]['Association']['PublicIp'])
 
     print "\n"
