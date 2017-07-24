@@ -11,4 +11,5 @@ export TF_VAR_terraform_aws_vpc=terraform-vpc-${emailid}
 export TF_VAR_aws_keypair=MyKeyPair-${emailid}
 export TF_VAR_emailid=${emailid}
 export TF_VAR_emailidsan=`echo ${emailid} | sed 's/[\@._-]//g'`
+sleep 5
 export TF_VAR_aws_alias=https://`aws iam list-account-aliases | jq --raw-output .AccountAliases[]`.signin.aws.amazon.com/console
