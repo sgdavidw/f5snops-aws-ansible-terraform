@@ -9,8 +9,8 @@ variable "web_server_ami" {
   type = "map"
 
   default = {
-    "us-east-1"      = "ami-40d28157"
-    "ap-southeast-1" = "ami-2378f540"
+    "us-east-1"      = "ami-a4c7edb2"
+    "ap-southeast-1" = "ami-77af2014"
   }
 }
 
