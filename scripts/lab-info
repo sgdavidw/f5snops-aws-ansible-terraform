@@ -16,7 +16,9 @@ instances = ec2.instances.filter(
              {'Name':'key-name','Values':['MyKeyPair-%s*' %(student_email)]}
          ]
 )
-
+print "AWS Console"
+print " URL: %s?us-east-1" %(os.getenv('TF_VAR_aws_alias'))
+print "Username: %s / Password: %s" %(os.getenv('emailid'),os.getenv('shortUrl'))
 print "WAF ELB"
 print "  URL: https://%s" %(elbs['LoadBalancerDescriptions'][0]['CanonicalHostedZoneName'])
 print "\n"
