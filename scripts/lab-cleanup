@@ -24,7 +24,7 @@ if instances:
             )
 buckets = s3_client.list_buckets()['Buckets']
 for bucket in buckets:
-    if student_id in bucket['Name']:
+    if student_id in bucket['Name'] and "-terraform-bucket" not in bucket['Name']:
         print 'deleting',bucket['Name']
         b = s3.Bucket(bucket['Name'])
         b.objects.all().delete()
