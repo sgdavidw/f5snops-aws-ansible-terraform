@@ -45,7 +45,7 @@ for instance in instances:
             cmd_array = cmd.split()
             cmd_array.append("run /util bash -c \"tail -3 /var/log/cloudlibs-install.log\"")
             output = subprocess.check_output(cmd_array,stderr=subprocess.STDOUT)
-            if "Custom script finished." in output or "custom-config.sh complete" in output:
+            if "Custom script finished." in output or "custom-config.sh complete" in output or "/config/cloud/aws/custom-config.sh exited with code 0" in output:
                 print "System Ready"
                 if "waf" in instance_name:
                     print " MGMT URL:\thttps://%s:8443" %(instance.public_ip_address)
