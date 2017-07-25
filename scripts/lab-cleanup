@@ -9,6 +9,7 @@ student_id = student_id.replace('.','')
 autoscaling = boto3.client('autoscaling')
 s3 = boto3.resource('s3')
 s3_client = boto3.client('s3')
+ec2 = boto3.resource('ec2')
 instances = []
 asg = ""
 for instance in autoscaling.describe_auto_scaling_instances()['AutoScalingInstances']:
@@ -30,3 +31,5 @@ for bucket in buckets:
         b.objects.all().delete()
         b.delete()
 
+key = ec2.KeyPair("MyKeyPair-%s" %(student_email))
+key.delete()
