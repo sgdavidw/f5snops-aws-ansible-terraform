@@ -21,6 +21,7 @@ variable "aws_region" {
 
 variable "bigiqLicenseManager" {
   description = "Management IP address of the BigIQ License Manager"
+  default     = "null"
 }
 
 variable "bigiqLicensePoolName" {
@@ -37,6 +38,10 @@ variable "aws_keypair" {
 
 variable "emailid" {
   description = "emailid"
+}
+variable "waf_emailid" {
+  description = "waf email notification"
+  default = ""
 }
 
 variable "emailidsan" {
