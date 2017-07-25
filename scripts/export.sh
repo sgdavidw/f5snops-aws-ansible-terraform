@@ -7,11 +7,12 @@ else echo "Zero or multiple emailids! Something went wrong."
 fi
 export AWS_ACCESS_KEY_ID=`cat aws_accesskeys_${emailid}.json | jq --raw-output .AccessKey.AccessKeyId`
 export AWS_SECRET_ACCESS_KEY=`cat aws_accesskeys_${emailid}.json | jq --raw-output .AccessKey.SecretAccessKey`
+export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION-us-east-1}
+
+export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 export TF_VAR_terraform_aws_vpc=terraform-vpc-${emailid}
 export TF_VAR_aws_keypair=MyKeyPair-${emailid}
 export TF_VAR_emailid=${emailid}
 export TF_VAR_emailidsan=`echo ${emailid} | sed 's/[\@._-]//g'`
 sleep 5
 export TF_VAR_aws_alias=https://`aws iam list-account-aliases | jq --raw-output .AccountAliases[]`.signin.aws.amazon.com/console
-aws s3 mb s3://${TF_VAR_emailidsan}-terraform-bucket
-terraform init -backend-config bucket=${TF_VAR_emailidsan}-terraform-bucket -backend-config region=us-east-1
