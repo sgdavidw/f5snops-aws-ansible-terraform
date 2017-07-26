@@ -15,7 +15,7 @@ cmd = ["docker","run","-it","-d", "-e", "emailid=%s" %(emailid),"-e", "TF_VAR_bi
        "-e", "SNOPS_AUTOCLONE=0","-e", "shortUrl=%s" %(shortUrl), "f5devcentral/f5-super-netops-container:base"]
 
 docker_id = subprocess.check_output(cmd).strip()
-#docker_id = "7e1b7cb4c009dc0fdc1df6b5e29af53893ce18525f73b4657dda1cbb3986301f"
+
 print  docker_id
 # change for your repo
 shell_cmd = "cd ~;%s" %(git_cmd)
@@ -28,11 +28,28 @@ cmd = ["docker","exec","-it",docker_id,"bash", "-c", shell_cmd]
 output = subprocess.check_output(cmd)
 print output
 
+print """#
+# TERRAFORM PLAN
+#"""
+
 cmd = ["docker","exec","-it",docker_id,"bash", "-c", "source ~/.profile &> /dev/null;cd ~/marfil-f5-terraform;terraform plan &> plan.log"]
 output = subprocess.check_output(cmd)
 
-cmd = ["docker","exec","-it",docker_id,"bash", "-c", "source ~/.profile &> /dev/null;cd ~/marfil-f5-terraform;terraform apply &> apply.log"]
-output = subprocess.check_output(cmd)
+print """#
+# TERRAFORM APPLY
+#"""
+
+cnt = 0
+ok = 0
+while ok != 1:
+    cmd = ["docker","exec","-it",docker_id,"bash", "-c", "source ~/.profile &> /dev/null;cd ~/marfil-f5-terraform;terraform apply &> apply.log"]
+    try:
+        output = subprocess.check_output(cmd)
+    except:
+        cnt += 1
+        print 'failed terraform apply, trying again', cnt
+        time.sleep(60)
+    ok = 1
 
 
 cmd = ["docker","exec","-it",docker_id,"bash", "-c", "source ~/.profile &> /dev/null;cd ~/marfil-f5-terraform;./scripts/lab-info |grep -c \"System Ready\";"]
@@ -56,15 +73,38 @@ while count != "3":
 #
 cmd = ["docker","exec","-it",docker_id,"bash", "-c", "source ~/.profile &> /dev/null;cd ~/marfil-f5-terraform;scripts/lab-cleanup"]
 output = subprocess.check_output(cmd)
+print """#
+# CLEANUP
+#
+"""
 
-cmd = ["docker","exec","-it",docker_id,"bash", "-c", "source ~/.profile &> /dev/null;cd ~/marfil-f5-terraform;terraform destroy -force &> destroy.log"]
-output = subprocess.check_output(cmd)
+print "run time",datetime.datetime.now()-start_time
+
+print """#
+# TERRAFORM DESTROY
+#"""
+
+cnt = 0
+ok = 0
+while ok != 1:
+    cmd = ["docker","exec","-it",docker_id,"bash", "-c", "source ~/.profile &> /dev/null;cd ~/marfil-f5-terraform;terraform destroy -force &> destroy%d.log" %(cnt)]
+    try:
+        output = subprocess.check_output(cmd)
+    except:
+        cnt += 1
+        print 'failed terraform destroy, trying again', cnt
+        time.sleep(60)
+    ok = 1
 
 cmd = ["docker","exec","-it",docker_id,"bash", "-c", "source ~/.profile &> /dev/null;cd ~/marfil-f5-terraform;scripts/deleteBucket.sh"]
 output = subprocess.check_output(cmd)
+
 print output
 
 cmd = ["docker","rm","-f",docker_id]
+output = subprocess.check_output(cmd)
+
+cmd = ["scripts/deleteUser.sh",emailid]
 output = subprocess.check_output(cmd)
 
 print "run time",datetime.datetime.now()-start_time
