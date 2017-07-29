@@ -28,7 +28,6 @@ echo `terraform --version`
 #install aws-cli
 
 pip install --upgrade --user awscli
-pip install boto3
 mkdir ~/.aws/
 export PATH=~/.local/bin:$PATH
 export AWS_CONFIG_FILE=~/.aws/config

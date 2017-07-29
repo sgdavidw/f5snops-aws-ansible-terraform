@@ -16,3 +16,4 @@ export TF_VAR_emailid=${emailid}
 export TF_VAR_emailidsan=`echo ${emailid} | sed 's/[\@._-]//g'`
 sleep 5
 export TF_VAR_aws_alias=https://`aws iam list-account-aliases | jq --raw-output .AccountAliases[]`.signin.aws.amazon.com/console
+export PATH=$PATH:~/marfil-f5-terraform/scripts
