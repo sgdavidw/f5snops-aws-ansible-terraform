@@ -35,19 +35,19 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     timezone          = "UTC"
     ntpServer         = "0.pool.ntp.org"
 
+    # The auto scaling thresholds were changed to 1/10 the default to trigger autoscale with modest traffic in lab.
+
     #AUTO SCALING CONFIGURATION
     scalingMinSize          = "1"
     scalingMaxSize          = "2"
     scaleDownBytesThreshold = 1000
     scaleUpBytesThreshold   = 3500
     notificationEmail       = "${var.waf_emailid != "" ? var.waf_emailid : var.emailid}"
-
     #WAF VIRTUAL SERVICE CONFIGURATION
     virtualServicePort = "${var.server_port}"
     applicationPort    = "${var.server_port}"
     appInternalDnsName = "${aws_elb.example.dns_name}"
     policyLevel        = "high"
-
     #TAGS
     application = "f5app"
     environment = "f5env"
