@@ -33,7 +33,12 @@ export PATH=~/.local/bin:$PATH
 export AWS_CONFIG_FILE=~/.aws/config
 
 # download aws keys from shortUrl
-cd ~/.aws/ && { wget -O config https://xfxormhtrc.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
+if [ $F5_ENV == "development" ]
+  then
+  cd ~/.aws/ && { wget -O config https://ehmgcx0mn3.execute-api.us-east-1.amazonaws.com/dev/${shortUrl} ; cd -; }
+  else
+  cd ~/.aws/ && { wget -O config https://xfxormhtrc.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
+fi
 
 echo "aws --version"
 echo `aws --version`
