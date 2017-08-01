@@ -38,7 +38,7 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     # The auto scaling thresholds were changed to 1/10 the default to trigger autoscale with modest traffic in lab.
 
     #AUTO SCALING CONFIGURATION
-    scalingMinSize          = "1"
+    scalingMinSize          = "2"
     scalingMaxSize          = "2"
     scaleDownBytesThreshold = 10000
     scaleUpBytesThreshold   = 35000
