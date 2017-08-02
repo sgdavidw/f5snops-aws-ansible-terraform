@@ -38,10 +38,10 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     # The auto scaling thresholds were changed to 1/10 the default to trigger autoscale with modest traffic in lab.
 
     #AUTO SCALING CONFIGURATION
-    scalingMinSize          = "2"
+    scalingMinSize          = "1"
     scalingMaxSize          = "2"
-    scaleDownBytesThreshold = 10000
-    scaleUpBytesThreshold   = 35000
+    scaleDownBytesThreshold = 1000
+    scaleUpBytesThreshold   = 3500
     notificationEmail       = "${var.waf_emailid != "" ? var.waf_emailid : var.emailid}"
     #WAF VIRTUAL SERVICE CONFIGURATION
     virtualServicePort = "${var.server_port}"
