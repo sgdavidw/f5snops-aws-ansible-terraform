@@ -16,7 +16,7 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-hourly" {
     #INSTANCE CONFIGURATION
 
     imageName            = "Good25Mbps"
-    instanceType         = "c4.xlarge"
+    instanceType         = "m4.xlarge"
     restrictedSrcAddress = "0.0.0.0/0"
     sshKey               = "${var.aws_keypair}"
     restrictedSrcAddress = "0.0.0.0/0"
