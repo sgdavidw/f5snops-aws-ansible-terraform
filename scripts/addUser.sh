@@ -64,8 +64,10 @@ aws iam list-user-policies \
 aws ec2 create-key-pair --key-name MyKeyPair-${emailid} --query 'KeyMaterial' --output text > MyKeyPair-${emailid}.pem
 chmod 400 MyKeyPair-${emailid}.pem
 
-#create a self-signed SSL certificate
+#just in case...
+aws iam delete-server-certificate --server-certificate-name elb_cert_${emailid} 2> /dev/null
 
+#create a self-signed SSL certificate
 openssl req -subj '/O=test LTD./CN=f5.io/C=US' -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout ${emailidsan}.key -out ${emailidsan}.crt -nodes
 
 # replace temporary aws config file with new account aws access key and secret access key; uses envsubst from the gettext package.
