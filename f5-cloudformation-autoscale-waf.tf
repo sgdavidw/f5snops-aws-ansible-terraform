@@ -57,5 +57,5 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
   }
 
   #CloudFormation templates triggered from Terraform must be hosted on AWS S3.
-  template_url = "https://s3.amazonaws.com/f5-public-cloud/f5-autoscale-bigip.template"
+  template_url = "https://s3.amazonaws.com/f5-cft/f5-autoscale-bigip.template"
 }
