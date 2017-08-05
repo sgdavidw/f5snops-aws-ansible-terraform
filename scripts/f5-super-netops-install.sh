@@ -33,7 +33,26 @@ export PATH=~/.local/bin:$PATH
 export AWS_CONFIG_FILE=~/.aws/config
 
 # download aws keys from shortUrl
-cd ~/.aws/ && { wget -O config https://xfxormhtrc.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
+if [ $F5_ENV == "development" ]
+  then
+  cd ~/.aws/ && { wget -O config https://ehmgcx0mn3.execute-api.us-east-1.amazonaws.com/dev/${shortUrl} ; cd -; }
+  else
+  cd ~/.aws/ && { wget -O config https://xfxormhtrc.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
+fi
+abort=0
+grep secret ~/.aws/config &> /dev/null
+if [ $? != 0 ]
+  then
+  echo "Invalid shortUrl.  Aborting".
+  abort=1
+fi
+
+aws iam get-user --user-name $emailid &> /dev/null
+if [ $? == 0 ]
+  then
+  echo "Existing user $emailid.  Aborting".
+  abort=1
+fi
 
 echo "aws --version"
 echo `aws --version`
@@ -50,8 +69,11 @@ chmod +x ./scripts/lab-info
 # openssl aes-256-cbc -d -a -in ~/.aws/config.enc -out ~/.aws/config -pass pass:$decryptPassword
 
 cp ./scripts/.profile ~/.profile
-
-source ./scripts/addUser.sh
-
+if [ $abort == 0 ]
+  then
+  source ./scripts/addUser.sh
+  else
+  echo "Install aborted"
+fi
 # encrypt
 # openssl aes-256-cbc -a -salt -in config -out config.enc
