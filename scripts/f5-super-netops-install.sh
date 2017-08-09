@@ -43,7 +43,7 @@ abort=0
 grep secret ~/.aws/config &> /dev/null
 if [ $? != 0 ]
   then
-  echo "Invalid shortUrl.  Aborting".
+  echo "Invalid shortUrl: $shortUrl.  Aborting".
   abort=1
 fi
 
