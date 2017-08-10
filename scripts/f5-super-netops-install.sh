@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#ab needs apk update
+apk update
+
 #install boto3
 pip install boto3
 
