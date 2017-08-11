@@ -192,7 +192,6 @@ resource "aws_security_group" "instance" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-
   lifecycle {
     create_before_destroy = true
   }
@@ -202,11 +201,11 @@ resource "aws_instance" "example-a" {
   count = 1
 
   #ami                    = "${var.web_server_ami}"
-  ami                    = "${lookup(var.web_server_ami, var.aws_region)}"
-  instance_type          = "t2.micro"
-  subnet_id              = "${aws_subnet.public-a.id}"
-  vpc_security_group_ids = ["${aws_security_group.instance.id}"]
-  key_name               = "${var.aws_keypair}"
+  ami                         = "${lookup(var.web_server_ami, var.aws_region)}"
+  instance_type               = "t2.micro"
+  subnet_id                   = "${aws_subnet.public-a.id}"
+  vpc_security_group_ids      = ["${aws_security_group.instance.id}"]
+  key_name                    = "${var.aws_keypair}"
   associate_public_ip_address = true
 
   user_data = <<-EOF
@@ -225,6 +224,7 @@ resource "aws_instance" "example-a" {
     group       = "f5group"
     owner       = "f5owner"
     costcenter  = "f5costcenter"
+    f5waftag    = "f5instance"
   }
 }
 
@@ -232,11 +232,11 @@ resource "aws_instance" "example-b" {
   count = 1
 
   #ami                    = "{var.web_server_ami}"
-  ami                    = "${lookup(var.web_server_ami, var.aws_region)}"
-  instance_type          = "t2.micro"
-  subnet_id              = "${aws_subnet.public-b.id}"
-  vpc_security_group_ids = ["${aws_security_group.instance.id}"]
-  key_name               = "${var.aws_keypair}"
+  ami                         = "${lookup(var.web_server_ami, var.aws_region)}"
+  instance_type               = "t2.micro"
+  subnet_id                   = "${aws_subnet.public-b.id}"
+  vpc_security_group_ids      = ["${aws_security_group.instance.id}"]
+  key_name                    = "${var.aws_keypair}"
   associate_public_ip_address = true
 
   user_data = <<-EOF
@@ -255,6 +255,7 @@ resource "aws_instance" "example-b" {
     group       = "f5group"
     owner       = "f5owner"
     costcenter  = "f5costcenter"
+    f5waftag    = "f5instance"
   }
 }
 
