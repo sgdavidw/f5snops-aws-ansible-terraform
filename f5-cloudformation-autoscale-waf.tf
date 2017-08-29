@@ -46,8 +46,8 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     #WAF VIRTUAL SERVICE CONFIGURATION
     virtualServicePort      = "${var.server_port}"
     applicationPort         = "${var.server_port}"
-    applicationPoolTagKey   = "f5waftag"
-    applicationPoolTagValue = "f5instance"
+    applicationPoolTagKey   = "findme"
+    applicationPoolTagValue = "web"
     policyLevel             = "low"
     #TAGS
     application = "f5app"
