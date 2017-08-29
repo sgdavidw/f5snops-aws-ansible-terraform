@@ -89,4 +89,3 @@ if [ $abort == 0 ]
 fi
 # encrypt
 # openssl aes-256-cbc -a -salt -in config -out config.enc
-[root@f5-super-netops] [~/marfil-f5-terraform] $ 
