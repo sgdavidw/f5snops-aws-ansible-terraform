@@ -8,7 +8,7 @@ fi
 export AWS_ACCESS_KEY_ID=`cat aws_accesskeys_${emailid}.json | jq --raw-output .AccessKey.AccessKeyId`
 export AWS_SECRET_ACCESS_KEY=`cat aws_accesskeys_${emailid}.json | jq --raw-output .AccessKey.SecretAccessKey`
 region=`aws configure get region`
-export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+export AWS_DEFAULT_REGION=$region
 
 export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 export TF_VAR_terraform_aws_vpc=terraform-vpc-${emailid}
