@@ -31,23 +31,32 @@ echo `terraform --version`
 #install aws-cli
 
 pip install --upgrade --user awscli
-mkdir ~/.aws/
 export PATH=~/.local/bin:$PATH
 export AWS_CONFIG_FILE=~/.aws/config
-
-# download aws keys from shortUrl
-if [ $F5_ENV == "development" ]
-  then
-  cd ~/.aws/ && { wget -O config https://ehmgcx0mn3.execute-api.us-east-1.amazonaws.com/dev/${shortUrl} ; cd -; }
-  else
-  cd ~/.aws/ && { wget -O config https://xfxormhtrc.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
-fi
 abort=0
-grep secret ~/.aws/config &> /dev/null
-if [ $? != 0 ]
-  then
-  echo "Invalid shortUrl: $shortUrl.  Aborting".
-  abort=1
+
+if [ ! -d ~/.aws/ ]; then
+  mkdir ~/.aws/
+fi
+
+if [ ! -f ~/.aws/credentials ]; then
+# download aws keys from shortUrl
+  if [ $F5_ENV == "development" ]
+    then
+    cd ~/.aws/ && { wget -O config https://ehmgcx0mn3.execute-api.us-east-1.amazonaws.com/dev/${shortUrl} ; cd -; }
+    else
+    cd ~/.aws/ && { wget -O config https://xfxormhtrc.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
+  fi
+
+  grep secret ~/.aws/* &> /dev/null
+  if [ $? != 0 ]
+    then
+    echo "Invalid shortUrl: $shortUrl.  Aborting".
+    abort=1
+  fi
+
+else echo "AWS credentials previously configured.
+"
 fi
 
 aws iam get-user --user-name $emailid &> /dev/null
@@ -80,3 +89,4 @@ if [ $abort == 0 ]
 fi
 # encrypt
 # openssl aes-256-cbc -a -salt -in config -out config.enc
+[root@f5-super-netops] [~/marfil-f5-terraform] $ 

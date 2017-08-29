@@ -73,7 +73,7 @@ openssl req -subj '/O=test LTD./CN=f5.io/C=US' -new -newkey rsa:2048 -days 365 -
 # replace temporary aws config file with new account aws access key and secret access key; uses envsubst from the gettext package.
 
 region=`aws configure get region`
-export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION-$region}
+export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
 
 # sleep 5s
 sleep 5s
