@@ -44,10 +44,11 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     scaleUpBytesThreshold   = 35000
     notificationEmail       = "${var.waf_emailid != "" ? var.waf_emailid : var.emailid}"
     #WAF VIRTUAL SERVICE CONFIGURATION
-    virtualServicePort = "${var.server_port}"
-    applicationPort    = "${var.server_port}"
-    appInternalDnsName = "${aws_elb.example.dns_name}"
-    policyLevel        = "high"
+    virtualServicePort      = "${var.server_port}"
+    applicationPort         = "${var.server_port}"
+    applicationPoolTagKey   = "findme"
+    applicationPoolTagValue = "web"
+    policyLevel             = "low"
     #TAGS
     application = "f5app"
     environment = "f5env"

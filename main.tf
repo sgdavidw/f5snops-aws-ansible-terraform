@@ -218,12 +218,8 @@ resource "aws_instance" "example-a" {
               EOF
 
   tags {
-    Name        = "web-az1.${count.index}: ${var.emailidsan}"
-    application = "f5app"
-    environment = "f5env"
-    group       = "f5group"
-    owner       = "f5owner"
-    costcenter  = "f5costcenter"
+    Name   = "web-az1.${count.index}: ${var.emailidsan}"
+    findme = "web"
   }
 }
 
@@ -248,12 +244,8 @@ resource "aws_instance" "example-b" {
               EOF
 
   tags {
-    Name        = "web-az2.${count.index}: ${var.emailidsan}"
-    application = "f5app"
-    environment = "f5env"
-    group       = "f5group"
-    owner       = "f5owner"
-    costcenter  = "f5costcenter"
+    Name   = "web-az2.${count.index}: ${var.emailidsan}"
+    findme = "web"
   }
 }
 
