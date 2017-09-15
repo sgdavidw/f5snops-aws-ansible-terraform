@@ -1,10 +1,6 @@
 #!/bin/bash
 
-<<<<<<< HEAD
 #apk update for ab
-=======
-#ab needs apk update
->>>>>>> dev
 apk update
 
 #install boto3
