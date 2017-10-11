@@ -33,8 +33,7 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     managementGuiPort = 8443
     timezone          = "UTC"
     ntpServer         = "0.pool.ntp.org"
-
-    # The auto scaling thresholds were changed to 1/10 the default to trigger autoscale with modest traffic in lab.
+    restrictedSrcAddress = "0.0.0.0/0"
 
     #AUTO SCALING CONFIGURATION
     scalingMinSize          = "1"
@@ -57,5 +56,5 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
   }
 
   #CloudFormation templates triggered from Terraform must be hosted on AWS S3.
-  template_url = "https://s3.amazonaws.com/f5-cft/f5-autoscale-bigip.template"
+  template_url = "https://s3.amazonaws.com/f5-public-cloud/f5-autoscale-bigip.template"
 }
