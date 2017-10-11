@@ -24,7 +24,6 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     vpc                      = "${aws_vpc.terraform-vpc.id}"
     availabilityZones        = "${var.aws_region}a,${var.aws_region}b"
     subnets                  = "${aws_subnet.public-a.id},${aws_subnet.public-b.id}"
-    restrictedSrcAddress     = "0.0.0.0/0"
     bigipElasticLoadBalancer = "${aws_elb.f5-autoscale-waf-elb.name}"
 
     #INSTANCE CONFIGURATION
