@@ -11,6 +11,7 @@ variable "web_server_ami" {
   default = {
     "us-east-1"      = "ami-a4c7edb2"
     "ap-southeast-1" = "ami-77af2014"
+    "us-west-2"      = "ami-6df1e514"
   }
 }
 
@@ -39,9 +40,10 @@ variable "aws_keypair" {
 variable "emailid" {
   description = "emailid"
 }
+
 variable "waf_emailid" {
   description = "waf email notification"
-  default = ""
+  default     = ""
 }
 
 variable "emailidsan" {
