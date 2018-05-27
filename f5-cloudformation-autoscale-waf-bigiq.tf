@@ -28,7 +28,6 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
 
     #INSTANCE CONFIGURATION
     sshKey            = "${var.aws_keypair}"
-    throughput        = "25Mbps"
     adminUsername     = "cluster-admin"
     managementGuiPort = 8443
     timezone          = "UTC"
@@ -41,12 +40,20 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     scaleDownBytesThreshold = 10000
     scaleUpBytesThreshold   = 35000
     notificationEmail       = "${var.waf_emailid != "" ? var.waf_emailid : var.emailid}"
+
     #WAF VIRTUAL SERVICE CONFIGURATION
     virtualServicePort      = "${var.server_port}"
     applicationPort         = "${var.server_port}"
     applicationPoolTagKey   = "findme"
     applicationPoolTagValue = "web"
     policyLevel             = "low"
+
+    #BIG-IQ LICENSING CONFIGURATION
+    bigIqAddress         = "${var.bigIqLicenseManager}"
+    bigIqUsername        = "admin"
+    bigIqPasswordS3Arn   = "arn:aws:s3:::f5-public-cloud/passwd"
+    bigIqLicensePoolName = "${var.bigIqLicensePoolName}"
+
     #TAGS
     application = "f5app"
     environment = "f5env"
@@ -56,5 +63,5 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
   }
 
   #CloudFormation templates triggered from Terraform must be hosted on AWS S3.
-  template_url = "https://s3.amazonaws.com/f5-public-cloud/f5-autoscale-bigip.template"
+  template_url = "https://s3.amazonaws.com/f5-public-cloud/f5-bigiq-autoscale-bigip-waf_v3.1.0.template"
 }

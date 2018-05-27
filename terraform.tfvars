@@ -1,4 +1,4 @@
-bigiqLicensePoolName = "bigiqLicPool"
+bigIqLicensePoolName = "bigIqLicensePool"
 
 server_port = 80
 

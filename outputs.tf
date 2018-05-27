@@ -1,5 +1,5 @@
-output "bigiqLicenseManager" {
-  value = "${var.bigiqLicenseManager}"
+output "bigIqLicenseManager" {
+  value = "${var.bigIqLicenseManager}"
 }
 
 output "elb_dns_name" {
@@ -27,19 +27,19 @@ output "vpc-private-a-id" {
 }
 
 output "vpc-public-b" {
-  value = "${aws_subnet.public-a.cidr_block}"
+  value = "${aws_subnet.public-b.cidr_block}"
 }
 
 output "vpc-public-b-id" {
-  value = "${aws_subnet.public-a.id}"
+  value = "${aws_subnet.public-b.id}"
 }
 
 output "vpc-private-b" {
-  value = "${aws_subnet.private-a.cidr_block}"
+  value = "${aws_subnet.private-b.cidr_block}"
 }
 
 output "vpc-private-b-id" {
-  value = "${aws_subnet.private-a.id}"
+  value = "${aws_subnet.private-b.id}"
 }
 
 output "sshKey" {

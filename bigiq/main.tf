@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "${aws_region}"
+  region = "${var.aws_region}"
 }
 
 resource "aws_vpc" "terraform-vpc" {

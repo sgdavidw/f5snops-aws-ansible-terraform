@@ -20,13 +20,14 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "bigiqLicenseManager" {
+variable "bigIqLicenseManager" {
   description = "Management IP address of the BigIQ License Manager"
   default     = "null"
 }
 
-variable "bigiqLicensePoolName" {
+variable "bigIqLicensePoolName" {
   description = "BigIQ License Pool name"
+  default = "BigIQLicensePool"
 }
 
 variable "server_port" {

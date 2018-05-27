@@ -16,20 +16,11 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-hourly" {
     #INSTANCE CONFIGURATION
 
     imageName            = "Good25Mbps"
-    instanceType         = "c5d.large"
+    instanceType         = "m4.large"
     restrictedSrcAddress = "0.0.0.0/0"
     sshKey               = "${var.aws_keypair}"
     restrictedSrcAddressApp = "0.0.0.0/0"
     ntpServer            = "0.pool.ntp.org"
-
-    #BIG-IQ LICENSING CONFIGURATION
-
-
-    # bigiqAddress         = "${var.bigiqLicenseManager}"
-    # bigiqUsername        = "admin"
-    # bigiqPasswordS3Arn   = "arn:aws:s3:::f5-public-cloud/passwd"
-    # bigiqLicensePoolName = "${var.bigiqLicensePoolName}"
-
 
     #TAGS
 
@@ -41,5 +32,5 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-hourly" {
   }
 
   #CloudFormation templates triggered from Terraform must be hosted on AWS S3. Experimental hosted in non-canonical S3 bucket.
-  template_url = "https://s3.amazonaws.com/f5-public-cloud/f5-existing-stack-across-az-cluster-hourly-2nic-bigip__v3.1.0_MODIFIED.template"
+  template_url = "https://s3.amazonaws.com/f5-public-cloud/f5-existing-stack-across-az-cluster-hourly-2nic-bigip_v3.1.0_MODIFIED.template"
 }

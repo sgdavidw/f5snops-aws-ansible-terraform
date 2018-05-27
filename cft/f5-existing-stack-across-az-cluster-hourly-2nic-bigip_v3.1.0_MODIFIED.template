@@ -655,10 +655,6 @@
     "c4.2xlarge",
     "c4.4xlarge",
     "c4.8xlarge"
-    "c5d.large"
-    "c5d.xlarge"
-    "c5d.2xlarge"
-    "c5d.4xlarge
    ],
    "ConstraintDescription": "Must be a valid EC2 instance type for BIG-IP",
    "Default": "m3.2xlarge",

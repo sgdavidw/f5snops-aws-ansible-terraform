@@ -19,3 +19,8 @@ variable "restrictedSrcAddress" {
   description = "Lock down management access by source IP address or network"
   default     = ["0.0.0.0/0", "10.0.0.0/16"]
 }
+
+variable "var.aws_region" {
+  description = "aws region (default is us-east-1)"
+  default     = "us-east-1"
+}
