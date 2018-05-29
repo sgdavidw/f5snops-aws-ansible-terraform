@@ -43,7 +43,7 @@ for instance in instances:
         if "phase running" in output:
             print "MCPD is up,",
             cmd_array = cmd.split()
-            cmd_array.append("run /util bash -c \"tail -3 /var/log/cloudlibs-install.log\"")
+            cmd_array.append("run /util bash -c \"tail -3 /var/log/cloud/aws/cloudlibs-install.log\"")
             output = subprocess.check_output(cmd_array,stderr=subprocess.STDOUT)
             if "Custom script finished." in output or "custom-config.sh complete" in output or "/config/cloud/aws/custom-config.sh exited with code 0" in output:
                 print "System Ready"

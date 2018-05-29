@@ -20,7 +20,11 @@ variable "restrictedSrcAddress" {
   default     = ["0.0.0.0/0", "10.0.0.0/16"]
 }
 
-variable "var.aws_region" {
+variable "aws_region" {
   description = "aws region (default is us-east-1)"
   default     = "us-east-1"
+}
+
+variable "bigiq_regkey" {
+  description = "bigiq_regkey"
 }

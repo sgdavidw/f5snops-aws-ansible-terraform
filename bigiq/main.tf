@@ -22,7 +22,7 @@ resource "aws_subnet" "f5-management-a" {
   vpc_id                  = "${aws_vpc.terraform-vpc.id}"
   cidr_block              = "10.0.101.0/24"
   map_public_ip_on_launch = "false"
-  availability_zone       = "${aws_region}a"
+  availability_zone       = "${var.aws_region}a"
 
   tags {
     Name = "management"
@@ -88,6 +88,14 @@ resource "aws_security_group" "f5_management" {
   }
 }
 
+data "template_file" "init" {
+  template = "${file("init.tpl")}"
+
+  vars {
+    bigiq_regkey = "${var.bigiq_regkey}"
+  }
+}
+
 resource "aws_instance" "bigiq" {
   count                       = 1
   ami                         = "${var.bigiq_ami}"
@@ -96,9 +104,14 @@ resource "aws_instance" "bigiq" {
   vpc_security_group_ids      = ["${aws_security_group.f5_management.id}"]
   key_name                    = "${var.aws_keypair}"
   associate_public_ip_address = true
+  user_data = "${data.template_file.init.rendered}"
   disable_api_termination     = true
-
   tags {
-    Name = "DO_NO_DELETE_f5-bigiq-5.1_terraform"
+    Name = "DO_NO_DELETE_f5-bigiq-terraform"
+    Role = "BigIqLicenseManager"
   }
+}
+resource "aws_eip" "bigiq" {
+  instance = "${aws_instance.bigiq.id}"
+  vpc      = true
 }
