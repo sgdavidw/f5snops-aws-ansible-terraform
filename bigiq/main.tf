@@ -90,7 +90,6 @@ resource "aws_security_group" "f5_management" {
 
 data "template_file" "init" {
   template = "${file("init.tpl")}"
-
   vars {
     bigiq_regkey = "${var.bigiq_regkey}"
   }
@@ -110,8 +109,21 @@ resource "aws_instance" "bigiq" {
     Name = "DO_NO_DELETE_f5-bigiq-terraform"
     Role = "BigIqLicenseManager"
   }
+
+  connection {
+    type = "ssh"
+    user = "admin"
+    private_key = "${file("~/marfil-f5-terraform/${var.aws_keypair}.pem")}"
+    timeout = "8m"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+        "install /sys license registration-key ${var.bigiq_regkey}"
+      ]
+  }
 }
-resource "aws_eip" "bigiq" {
+resource "aws_eip" "bigiq-eip" {
   instance = "${aws_instance.bigiq.id}"
   vpc      = true
 }

@@ -121,45 +121,14 @@ resource "aws_main_route_table_association" "association-subnet" {
   route_table_id = "${aws_route_table.rt1.id}"
 }
 
-/*
-resource "aws_launch_configuration" "example" {
-  image_id        = "ami-40d28157"
-  instance_type   = "t2.micro"
-  key_name        = "${var.aws_keypair}"
-  security_groups = ["${aws_security_group.instance.id}"]
-
-  }
-
-  user_data = <<-EOF
-              #!/bin/bash
-              az = `curl 169.254.169.254/latest/meta-data/placement/availability-zone`
-              echo "Hello, World from $az" > index.html
-              nohup busybox httpd -f -p "${var.server_port}" &
-              EOF
-
-  lifecycle {
-    create_before_destroy = true
-  }
+resource "aws_cloudwatch_log_group" "log-group" {
+  name = "${var.emailidsan}"
 }
 
-resource "aws_autoscaling_group" "example" {
-  launch_configuration = "${aws_launch_configuration.example.id}"
-  vpc_zone_identifier  = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
-
-  load_balancers    = ["${aws_elb.example.name}"]
-  health_check_type = "ELB"
-
-  min_size = 2
-  max_size = 10
-
-  tag {
-    key                 = "Name"
-    value               = "tf-asg-elb-${var.emailid}"
-    propagate_at_launch = true
-  }
+resource "aws_cloudwatch_log_stream" "log-stream" {
+  name           = "log-stream"
+  log_group_name = "${aws_cloudwatch_log_group.log-group.name}"
 }
-*/
-
 resource "aws_security_group" "instance" {
   name   = "terraform-example-instance"
   vpc_id = "${aws_vpc.terraform-vpc.id}"
