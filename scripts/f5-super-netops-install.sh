@@ -70,7 +70,7 @@ echo "aws --version"
 echo `aws --version`
 
 #mark lab-info python script executable
-chmod +x ./scripts/lab-info
+chmod +x ./scripts/*
 
 # if [ -z "$decryptPassword" ]; then
 #    echo "Enter decryption password:

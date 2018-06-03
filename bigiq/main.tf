@@ -104,12 +104,12 @@ resource "aws_instance" "bigiq" {
   key_name                    = "${var.aws_keypair}"
   associate_public_ip_address = true
   user_data = "${data.template_file.init.rendered}"
-  disable_api_termination     = true
+  disable_api_termination     = false
   tags {
     Name = "DO_NO_DELETE_f5-bigiq-terraform"
     Role = "BigIqLicenseManager"
   }
-
+/*
   connection {
     type = "ssh"
     user = "admin"
@@ -122,6 +122,7 @@ resource "aws_instance" "bigiq" {
         "install /sys license registration-key ${var.bigiq_regkey}"
       ]
   }
+*/
 }
 resource "aws_eip" "bigiq-eip" {
   instance = "${aws_instance.bigiq.id}"

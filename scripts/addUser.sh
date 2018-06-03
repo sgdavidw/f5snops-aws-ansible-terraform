@@ -20,7 +20,7 @@ do
   else
     ok=1
 
-alias=f5agility2017
+alias=f5agility2018
 emailidsan=`echo $emailid | sed 's/[\@._-]//g'`
 groupName=terraform-lab-user
 
