@@ -1,33 +1,5 @@
 #!/bin/bash
 
-#apk update for ab
-apk update
-
-#install boto3
-pip install boto3
-
-#install ab
-apk add apache2-utils
-
-#install gettext
-apk add gettext
-
-#install jq
-apk add jq
-
-#install openssl
-apk add openssl
-
-#install wget
-apk add wget
-
-#install terraform
-curl -O https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip
-unzip ./terraform_0.9.11_linux_amd64.zip
-mv ./terraform /usr/local/bin/
-echo "terraform --version"
-echo `terraform --version`
-
 #install aws-cli
 
 pip install --upgrade --user awscli
@@ -89,3 +61,5 @@ if [ $abort == 0 ]
 fi
 # encrypt
 # openssl aes-256-cbc -a -salt -in config -out config.enc
+# echo $TF_VAR_bigIqLicenseManager bigiq >> /etc/hosts
+

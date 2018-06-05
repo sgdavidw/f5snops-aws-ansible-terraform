@@ -85,6 +85,8 @@ touch $emailid.emailid
 
 . ./scripts/export.sh
 
+sed -i '2iexport shortUrl='$shortUrl ~/marfil-f5-terraform/scripts/export.sh
+
 envsubst < ./scripts/config.template > ~/.aws/config
 
 # aws s3 mb s3://${TF_VAR_emailidsan}-terraform-bucket

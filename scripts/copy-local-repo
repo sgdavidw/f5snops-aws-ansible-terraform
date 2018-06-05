@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir ~/marfil-f5-terraform && cp -r /data/* ~/marfil-f5-terraform
+cd ~/marfil-f5-terraform

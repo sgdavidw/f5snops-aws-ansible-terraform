@@ -1,0 +1,17 @@
+---
+
+- name: Create a pool
+  hosts: tag_Application_f5app
+  connection: local
+
+  tasks:
+  - name: Create a pool
+    bigip_pool:
+      server: "{{ inventory_hostname }}"
+      lb_method: "ratio-member"
+      name: pool2
+      password: "{{ lookup('env','shortUrl') }}"
+      state: present
+      user: "admin"
+      validate_certs: "no"
+    delegate_to: localhost
