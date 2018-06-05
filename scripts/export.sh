@@ -19,3 +19,4 @@ export TF_VAR_emailidsan=`echo ${emailid} | sed 's/[\@._-]//g'`
 sleep 5
 export TF_VAR_aws_alias=https://`aws iam list-account-aliases | jq --raw-output .AccountAliases[]`.signin.aws.amazon.com/console
 export TF_VAR_bigIqLicenseManager=$(get-bigiq)
+echo "TF_VAR_bigIqLicenseManager value is ${TF_VAR_bigIqLicenseManager}."
