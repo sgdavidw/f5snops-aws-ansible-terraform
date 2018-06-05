@@ -1,0 +1,15 @@
+---
+
+- name: Collect BIG-IP facts
+  hosts: tag_Application_f5app
+  connection: local
+  
+  tasks:
+  - name: Collect BIG-IP facts
+    bigip_facts:
+      server: "{{ inventory_hostname }}"
+      user: admin
+      password: "{{ lookup('env','shortUrl') }}"
+      include: interface
+    delegate_to: localhost
+    
