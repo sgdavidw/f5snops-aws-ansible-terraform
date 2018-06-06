@@ -98,7 +98,7 @@ data "template_file" "init" {
 resource "aws_instance" "bigiq" {
   count                       = 1
   ami                         = "${var.bigiq_ami}"
-  instance_type               = "m4.xlarge"
+  instance_type               = "m4.large"
   subnet_id                   = "${aws_subnet.f5-management-a.id}"
   vpc_security_group_ids      = ["${aws_security_group.f5_management.id}"]
   key_name                    = "${var.aws_keypair}"

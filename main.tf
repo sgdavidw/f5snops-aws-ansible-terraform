@@ -175,7 +175,7 @@ resource "aws_instance" "example-a" {
   subnet_id                   = "${aws_subnet.public-a.id}"
   vpc_security_group_ids      = ["${aws_security_group.instance.id}"]
   key_name                    = "${var.aws_keypair}"
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   user_data = <<-EOF
               #!/bin/bash
@@ -201,7 +201,7 @@ resource "aws_instance" "example-b" {
   subnet_id                   = "${aws_subnet.public-b.id}"
   vpc_security_group_ids      = ["${aws_security_group.instance.id}"]
   key_name                    = "${var.aws_keypair}"
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   user_data = <<-EOF
               #!/bin/bash
