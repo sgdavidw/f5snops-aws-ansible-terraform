@@ -11,6 +11,7 @@
       lb_method: "ratio-member"
       name: pool2
       password: "{{ lookup('env','shortUrl') }}"
+      server_port: "8443"
       state: present
       user: "admin"
       validate_certs: "no"

@@ -1,7 +1,12 @@
 resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-bigiq" {
   name         = "ha-${var.emailidsan}-${aws_vpc.terraform-vpc.id}"
   capabilities = ["CAPABILITY_IAM"]
-
+  
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "lab-cleanup"
+  }
+  
   parameters {
     #NETWORKING CONFIGURATION
 
@@ -36,6 +41,7 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-bigiq" {
     group       = "f5group"
     owner       = "f5owner"
     costcenter  = "f5costcenter"
+    role = "ltm"
   }
 
   #CloudFormation templates triggered from Terraform must be hosted on AWS S3. Experimental hosted in non-canonical S3 bucket.
