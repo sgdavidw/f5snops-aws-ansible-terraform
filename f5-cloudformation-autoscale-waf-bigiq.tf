@@ -17,12 +17,12 @@ resource "aws_elb" "f5-autoscale-waf-elb" {
 resource "aws_cloudformation_stack" "f5-autoscale-waf" {
   name         = "waf-${var.emailidsan}-${aws_vpc.terraform-vpc.id}"
   capabilities = ["CAPABILITY_IAM"]
-  
+  /*
   provisioner "local-exec" {
     when    = "destroy"
     command = "lab-cleanup"
   }
-
+  */
   parameters {
     #DEPLOYMENT
     deploymentName           = "waf-${var.emailidsan}"
@@ -58,14 +58,15 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     bigIqUsername        = "admin"
     bigIqPasswordS3Arn   = "arn:aws:s3:::f5-public-cloud/passwd"
     bigIqLicensePoolName = "${var.bigIqLicensePoolName}"
+    bigIqLicenseSkuKeyword1 = "LTMASM"
+    bigIqLicenseUnitOfMeasure = "yearly"
 
     #TAGS
     application = "f5app"
     environment = "f5env"
-    group       = "f5group"
+    group       = "waf"
     owner       = "f5owner"
     costcenter  = "f5costcenter"
-    role = "waf"
   }
 
   #CloudFormation templates triggered from Terraform must be hosted on AWS S3.

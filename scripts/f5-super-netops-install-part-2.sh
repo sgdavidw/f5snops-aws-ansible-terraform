@@ -15,9 +15,9 @@ if [ ! -f ~/.aws/credentials ]; then
 # download aws keys from shortUrl
   if [ $F5_ENV == "development" ]
     then
-    cd ~/.aws/ && { wget -O config https://pyndc37yn0.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
-    else
     cd ~/.aws/ && { wget -O config https://shuo18cqe6.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
+    else
+    cd ~/.aws/ && { wget -O config https://pyndc37yn0.execute-api.us-east-1.amazonaws.com/p/${shortUrl} ; cd -; }
   fi
 
   grep secret ~/.aws/* &> /dev/null
