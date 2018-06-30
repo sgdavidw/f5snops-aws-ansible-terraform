@@ -226,36 +226,50 @@ resource "aws_iam_server_certificate" "elb_cert" {
   private_key      = "${file("${var.emailidsan}.key")}"
 }
 
-resource "aws_elb" "example" {
-  name = "tf-elb-${var.emailidsan}"
-
-  cross_zone_load_balancing = true
+resource "aws_lb" "front_end" {
+  name = "tf-alb-${var.emailidsan}"
+  internal           = false
+  load_balancer_type = "application"
   security_groups           = ["${aws_security_group.elb.id}"]
   subnets                   = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
 
-  listener {
-    lb_port           = 80
-    lb_protocol       = "http"
-    instance_port     = "${var.server_port}"
-    instance_protocol = "http"
-  }
-
-  health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 3
-    interval            = 30
-    target              = "HTTP:${var.server_port}/"
-  }
-
-  instances                   = ["${aws_instance.example-a.id}", "${aws_instance.example-b.id}"]
-  cross_zone_load_balancing   = true
-  idle_timeout                = 400
-  connection_draining         = true
-  connection_draining_timeout = 400
-
   tags {
-    Name = "tf-elb-${var.emailidsan}"
+    Name = "tf-alb-${var.emailidsan}"
+  }
+}
+
+resource "aws_alb_target_group_attachment" "example-a" {
+  target_group_arn = "${aws_alb_target_group.alb_target.arn}"
+  target_id        = "${aws_instance.example-a.id}"
+  port             = 80
+}
+
+resource "aws_alb_target_group_attachment" "example-b" {
+  target_group_arn = "${aws_alb_target_group.alb_target.arn}"
+  target_id        = "${aws_instance.example-b.id}"
+  port             = 80
+}
+
+resource "aws_alb_target_group" "alb_target" {  
+  name     = "web-servers"  
+  port     = "80"  
+  protocol = "HTTP"  
+  vpc_id   = "${aws_vpc.terraform-vpc.id}"
+    tags {    
+    name = "web-servers"    
+  }   
+}
+
+resource "aws_alb_listener" "front_end" {  
+  load_balancer_arn = "${aws_lb.front_end.arn}"  
+  port              = "443"  
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2015-05"
+  certificate_arn   = "${aws_iam_server_certificate.elb_cert.arn}"
+  
+  default_action {    
+    target_group_arn = "${aws_alb_target_group.alb_target.arn}"
+    type             = "forward"  
   }
 }
 

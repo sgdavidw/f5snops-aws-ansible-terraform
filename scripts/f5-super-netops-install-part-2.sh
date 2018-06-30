@@ -63,3 +63,9 @@ fi
 # openssl aes-256-cbc -a -salt -in config -out config.enc
 # echo $TF_VAR_bigIqLicenseManager bigiq >> /etc/hosts
 
+#upgrade terraform
+curl -O https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
+unzip ./terraform_0.11.7_linux_amd64.zip
+mv ./terraform /usr/local/bin/
+echo "terraform --version"
+echo `terraform --version`
