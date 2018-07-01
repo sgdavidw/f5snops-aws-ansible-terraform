@@ -108,6 +108,10 @@ resource "aws_route_table" "rt1" {
     gateway_id = "${aws_vpn_gateway.vpn_gw.id}"
   }
 }
+resource "aws_vpn_gateway_route_propagation" "example" {
+  vpn_gateway_id = "${aws_vpn_gateway.vpn_gw.id}"
+  route_table_id = "${aws_route_table.rt1.id}"
+}
 
 resource "aws_main_route_table_association" "association-subnet" {
   vpc_id         = "${aws_vpc.terraform-vpc.id}"
