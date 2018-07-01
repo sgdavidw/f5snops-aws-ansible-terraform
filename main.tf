@@ -1,11 +1,3 @@
-/*
-terraform {
-  required_version = ">=0.9.6",
-  backend "s3" {
-    key    = "terraform.tfstate"
-  }
-}
-*/
 provider "aws" {
   region = "${var.aws_region}"
 }
@@ -111,8 +103,9 @@ resource "aws_route_table" "rt1" {
     gateway_id = "${aws_internet_gateway.gw.id}"
   }
 
-  tags {
-    Name = "Default"
+  route {
+    cidr_block = "10.1.0.0/16"
+    gateway_id = "${aws_vpn_gateway.vpn_gw.id}"
   }
 }
 
@@ -251,12 +244,12 @@ resource "aws_alb_target_group_attachment" "example-b" {
 }
 
 resource "aws_alb_target_group" "alb_target" {  
-  name     = "web-servers"  
+  name     = "web-${var.emailidsan}"  
   port     = "80"  
   protocol = "HTTP"  
   vpc_id   = "${aws_vpc.terraform-vpc.id}"
     tags {    
-    name = "web-servers"    
+    name = "web-${var.emailidsan}"
   }   
 }
 
@@ -368,6 +361,78 @@ resource "aws_security_group" "f5_data" {
     from_port   = 8
     to_port     = 0
     protocol    = "icmp"
+    cidr_blocks = "${var.restrictedSrcAddress}"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# VPN Gateway
+
+resource "aws_vpn_gateway" "vpn_gw" {
+  vpc_id = "${aws_vpc.terraform-vpc.id}"
+  tags {
+    Name = "vpn-gw-${var.emailidsan}"
+  }
+}
+
+# ELB and Security Group dedicated to Big-IQ deployed Auto Scale Group
+
+resource "aws_elb" "asg-lb" {
+  name = "tf-elb-asg-${var.emailidsan}"
+
+  cross_zone_load_balancing = true
+  security_groups           = ["${aws_security_group.asg-sg.id}"]
+  subnets                   = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "tcp"
+    instance_port     = 80
+    instance_protocol = "tcp"
+  }
+
+    listener {
+    lb_port           = 443
+    lb_protocol       = "tcp"
+    instance_port     = 443
+    instance_protocol = "tcp"
+  }
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    interval            = 30
+    target              = "TCP:80"
+  }
+
+  tags {
+    Name = "tf-elb-asg-${var.emailidsan}"
+  }
+}
+
+
+resource "aws_security_group" "asg-sg" {
+  name   = "asg"
+  vpc_id = "${aws_vpc.terraform-vpc.id}"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = "${var.restrictedSrcAddress}"
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = "${var.restrictedSrcAddress}"
   }
 
