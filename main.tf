@@ -394,13 +394,6 @@ resource "aws_elb" "asg-lb" {
   security_groups           = ["${aws_security_group.asg-sg.id}"]
   subnets                   = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
 
-  listener {
-    lb_port           = 80
-    lb_protocol       = "tcp"
-    instance_port     = 80
-    instance_protocol = "tcp"
-  }
-
     listener {
     lb_port           = 443
     lb_protocol       = "tcp"
@@ -413,7 +406,7 @@ resource "aws_elb" "asg-lb" {
     unhealthy_threshold = 2
     timeout             = 3
     interval            = 30
-    target              = "TCP:80"
+    target              = "TCP:22"
   }
 
   tags {
@@ -425,13 +418,6 @@ resource "aws_elb" "asg-lb" {
 resource "aws_security_group" "asg-sg" {
   name   = "asg"
   vpc_id = "${aws_vpc.terraform-vpc.id}"
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = "${var.restrictedSrcAddress}"
-  }
 
   ingress {
     from_port   = 443
