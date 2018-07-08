@@ -394,6 +394,8 @@ resource "aws_elb" "asg-lb" {
   security_groups           = ["${aws_security_group.asg-sg.id}"]
   subnets                   = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
 
+# disable listeners and health checks
+/*
     listener {
     lb_port           = 443
     lb_protocol       = "tcp"
@@ -408,7 +410,7 @@ resource "aws_elb" "asg-lb" {
     interval            = 30
     target              = "TCP:22"
   }
-
+*/
   tags {
     Name = "tf-elb-asg-${var.emailidsan}"
   }
@@ -419,6 +421,13 @@ resource "aws_security_group" "asg-sg" {
   name   = "asg"
   vpc_id = "${aws_vpc.terraform-vpc.id}"
 
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = "${var.restrictedSrcAddress}"
+  }
+  
   ingress {
     from_port   = 443
     to_port     = 443
