@@ -39,5 +39,5 @@ resource "aws_cloudformation_stack" "f5-bigip-single-nic-bigiq" {
   }
 
   #CloudFormation templates triggered from Terraform must be hosted on AWS S3. Experimental hosted in non-canonical S3 bucket.
-  template_url = "https://s3.amazonaws.com/f5-public-cloud/f5-existing-stack-bigiq-1nic-bigip_avr_v3.1.0.template"
+  template_url = "https://s3.amazonaws.com/f5-public-cloud/f5-existing-stack-bigiq-1nic-bigip_asm_avr_v3.1.0.template"
 }
