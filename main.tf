@@ -394,15 +394,14 @@ resource "aws_elb" "asg-lb" {
   security_groups           = ["${aws_security_group.asg-sg.id}"]
   subnets                   = ["${aws_subnet.public-a.id}", "${aws_subnet.public-b.id}"]
 
-# disable listeners and health checks
-/*
-    listener {
-    lb_port           = 443
+  listener {
+    lb_port           = 22
     lb_protocol       = "tcp"
-    instance_port     = 443
+    instance_port     = 22
     instance_protocol = "tcp"
   }
 
+/*
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
