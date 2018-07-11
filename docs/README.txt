@@ -1,1 +1,1 @@
-http://f5-agility-labs-public-cloud.readthedocs.io
+https://f5-agility-labs-f5-in-aws-1.readthedocs.io
