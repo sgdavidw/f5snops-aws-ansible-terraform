@@ -21,7 +21,7 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-bigiq" {
     #INSTANCE CONFIGURATION
 
     imageName            = "Good"
-    instanceType         = "m4.large"
+    instanceType         = "m4.xlarge"
     restrictedSrcAddress = "0.0.0.0/0"
     sshKey               = "${var.aws_keypair}"
     restrictedSrcAddressApp = "0.0.0.0/0"
