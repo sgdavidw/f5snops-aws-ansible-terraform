@@ -681,7 +681,7 @@
              "--dns ${NAME_SERVER}",
              "--module ltm:nominal",
              "--module avr:nominal",
-             "--moodule asm:nominal",
+             "--module asm:nominal",
              "--license-pool --cloud aws",
              "--big-iq-host",
              {

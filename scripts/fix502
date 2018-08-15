@@ -1,9 +1,10 @@
 #!/bin/bash +x
 echo Deleting and restarting the web instances...
 sed -i -e 's/count = 1/ count = 0/g' main.tf
-terraform apply
+terraform apply -auto-approve
 sed -i -e 's/count = 0/ count = 1/g' main.tf
-terraform apply
+terraform apply -auto-approve
 echo Just one minute. Be patient...
 sleep 30s
 terraform output
+echo Watch your two new web instances initializing in the AWS console and test again when status: running.
