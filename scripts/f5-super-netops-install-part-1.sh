@@ -34,8 +34,9 @@ pip install boto
 pip install ansible bigsuds f5-sdk netaddr deepdiff
 
 #install terraform
-curl -O https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip
-unzip ./terraform_0.9.11_linux_amd64.zip
-mv ./terraform /usr/local/bin/
+scripts/terraform-install
+#curl -O https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip
+#unzip ./terraform_0.9.11_linux_amd64.zip
+#mv ./terraform /usr/local/bin/
 echo "terraform --version"
 echo `terraform --version`
