@@ -10,7 +10,7 @@ do
     read emailid
   fi
 
-  if [ -f "./aws_accesskeys_${emailid}.json" ]; then 
+  if [ -f "./aws_accesskeys_${emailid}.json" ]; then
     echo "Account exists. Exporting shell variables.
     "
     . ./scripts/export.sh
@@ -22,7 +22,8 @@ do
 
 alias=f5agility2018
 emailidsan=`echo $emailid | sed 's/[\@._-]//g'`
-groupName=terraform-lab-user
+#groupName=terraform-lab-user
+groupName=admin
 
 # create user
 

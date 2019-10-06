@@ -4,3 +4,9 @@
 .terraform
 *.iml
 passwd
+dw*
+*crt
+*key
+*emailid
+aws_accesskeys*
+MyKeyPair*
