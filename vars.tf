@@ -6,7 +6,7 @@ variable "web_server_ami" {
 */
 
 variable "web_server_ami" {
-  type = "map"
+  type = map(string)
 
   default = {
     "us-east-1"      = "ami-a4c7edb2"
@@ -27,7 +27,7 @@ variable "bigIqLicenseManager" {
 
 variable "bigIqLicensePoolName" {
   description = "BigIQ License Pool name"
-  default = "BigIQLicensePool"
+  default     = "BigIQLicensePool"
 }
 
 variable "server_port" {
@@ -52,7 +52,7 @@ variable "emailidsan" {
 }
 
 variable "restrictedSrcAddress" {
-  type        = "list"
+  type        = list(string)
   description = "Lock down management access by source IP address or network"
   default     = ["0.0.0.0/0", "10.0.0.0/16"]
 }
@@ -60,3 +60,4 @@ variable "restrictedSrcAddress" {
 variable "aws_alias" {
   description = "Link alias to AWS Console"
 }
+
