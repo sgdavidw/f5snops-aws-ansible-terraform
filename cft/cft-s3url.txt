@@ -1,0 +1,7 @@
+* quickstart
+quickly launch an auto scale group of BIG-IP VEs into AWS to demonstrate a typical micro services use case and/or Blue and Green deployment strategy.
+https://s3.amazonaws.com/f5-cft/quickstarts/v0.0.0.1/templates/f5/master.template
+* f5-full-stack-byol-1nic-bigip-w-waf.template
+https://dwang-f5-cft.s3-us-west-2.amazonaws.com/f5-full-stack-byol-1nic-bigip-w-waf.template
+* f5-payg-autoscale-bigip-waf.template
+https://s3.amazonaws.com/f5-cft/f5-payg-autoscale-bigip-waf.template
