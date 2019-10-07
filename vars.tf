@@ -11,7 +11,8 @@ variable "web_server_ami" {
   default = {
     "us-east-1"      = "ami-a4c7edb2"
     "ap-southeast-1" = "ami-77af2014"
-    "us-west-2"      = "ami-6df1e514"
+    #"us-west-2"      = "ami-6df1e514"
+     "us-west-2"     = "ami-037e684b1e151a1be"
   }
 }
 
@@ -32,6 +33,12 @@ variable "bigIqLicensePoolName" {
 
 variable "server_port" {
   description = "The port the server will use for HTTP requests"
+  default     = 80
+}
+
+variable "server_ssl_port" {
+  description = "The port the server will use for HTTPS requests"
+  default     = 443
 }
 
 variable "aws_keypair" {

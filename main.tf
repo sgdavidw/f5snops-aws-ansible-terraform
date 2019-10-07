@@ -148,6 +148,13 @@ resource "aws_security_group" "instance" {
   }
 
   ingress {
+    from_port   = var.server_ssl_port
+    to_port     = var.server_ssl_port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     from_port   = 8
     to_port     = 0
     protocol    = "icmp"
@@ -176,7 +183,7 @@ resource "aws_instance" "example-a" {
   vpc_security_group_ids      = [aws_security_group.instance.id]
   key_name                    = var.aws_keypair
   associate_public_ip_address = true
-
+/*
   user_data = <<-EOF
               #!/bin/bash
               yum update -y
@@ -185,7 +192,7 @@ resource "aws_instance" "example-a" {
               service docker start
               docker run -d -p 80:80 --net host -e F5DEMO_APP=website -e F5DEMO_NODENAME="Public Cloud Lab: AZ #1" --restart always --name f5demoapp chen23/f5-demo-app:latest
 EOF
-
+*/
 
   tags = {
     Name   = "web-az1.${count.index}: ${var.emailidsan}"
@@ -203,7 +210,7 @@ resource "aws_instance" "example-b" {
   vpc_security_group_ids      = [aws_security_group.instance.id]
   key_name                    = var.aws_keypair
   associate_public_ip_address = true
-
+/*
   user_data = <<-EOF
               #!/bin/bash
               yum update -y
@@ -212,7 +219,7 @@ resource "aws_instance" "example-b" {
               service docker start
               docker run -d -p 80:80 --net host -e F5DEMO_APP=website -e F5DEMO_NODENAME="Public Cloud Lab: AZ #2" --restart always --name f5demoapp chen23/f5-demo-app:latest
 EOF
-
+*/
 
   tags = {
     Name   = "web-az2.${count.index}: ${var.emailidsan}"
