@@ -23,7 +23,7 @@ resource "aws_cloudformation_stack" "f5-autoscale-waf" {
     command = "lab-cleanup"
   }
   
-  parameters {
+  parameters = {
     #DEPLOYMENT
     deploymentName           = "waf-${var.emailidsan}"
     Vpc                      = "${aws_vpc.terraform-vpc.id}"

@@ -7,7 +7,7 @@ resource "aws_cloudformation_stack" "f5-cluster-cross-az-ha-hourly" {
     command = "lab-cleanup"
   }
 
-  parameters {
+  parameters = {
     #NETWORKING CONFIGURATION
 
     Vpc                          = "${aws_vpc.terraform-vpc.id}"
